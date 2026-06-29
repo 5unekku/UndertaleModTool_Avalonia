@@ -1,0 +1,13 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:UndertaleModTool"
+        x:Class="UndertaleModTool.MainWindow"
+        Title="UndertaleModTool"
+        Width="1280" Height="720"
+        Icon="/icon.ico">
+    <!-- shell only for phase 1; real layout is ported in phase 9 -->
+    <Grid>
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Text="UndertaleModTool (Avalonia port, work in progress)" />
+    </Grid>
+</Window>

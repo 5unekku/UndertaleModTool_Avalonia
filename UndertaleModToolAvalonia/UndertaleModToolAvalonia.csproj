@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <RollForward>LatestMajor</RollForward>
+        <OutputType>WinExe</OutputType>
+        <Nullable>disable</Nullable>
+        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
+        <DebugType>embedded</DebugType>
+        <Platforms>AnyCPU;x64</Platforms>
+        <LangVersion>13.0</LangVersion>
+        <ApplicationIcon>icon.ico</ApplicationIcon>
+        <GenerateDocumentationFile>True</GenerateDocumentationFile>
+        <StartupObject>UndertaleModTool.Program</StartupObject>
+        <NeutralLanguage>en</NeutralLanguage>
+        <!-- the avalonia port keeps the UndertaleModTool namespace, so it shares the same root namespace -->
+        <RootNamespace>UndertaleModTool</RootNamespace>
+        <AssemblyName>UndertaleModTool</AssemblyName>
+        <!-- suppress all missing xml comment warnings -->
+        <NoWarn>1591</NoWarn>
+    </PropertyGroup>
+    <ItemGroup>
+        <AvaloniaResource Include="Resources\**" />
+        <AvaloniaResource Include="icon.ico" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Underanalyzer\Underanalyzer\Underanalyzer.csproj" />
+        <ProjectReference Include="..\UndertaleModLib\UndertaleModLib.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.3.18" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.18" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.18" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.18" />
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.3.18" Condition="'$(Configuration)' == 'Debug'" />
+        <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.3.0" />
+        <PackageReference Include="log4net" Version="3.3.2" />
+        <PackageReference Include="NAudio" Version="2.3.0" />
+        <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="5.3.0" />
+    </ItemGroup>
+    <ItemGroup>
+        <!-- scripts live in the wpf project folder during the port; link them so they ship at runtime without duplicating 14mb -->
+        <Content Include="..\UndertaleModTool\Scripts\**">
+            <Link>Scripts\%(RecursiveDir)%(Filename)%(Extension)</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        </Content>
+    </ItemGroup>
+</Project>
