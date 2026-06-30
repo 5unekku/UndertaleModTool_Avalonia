@@ -1,0 +1,57 @@
+﻿<local:DataUserControl x:Class="UndertaleModTool.UndertaleExtensionFileEditor"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:UndertaleModTool"
+             xmlns:undertale="clr-namespace:UndertaleModLib.Models;assembly=UndertaleModLib"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="FileName" />
+        <local:UndertaleStringReference Grid.Row="0" Grid.Column="1" Margin="3" ObjectReference="{Binding Filename}" />
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Cleanup function name" />
+        <local:UndertaleStringReference Grid.Row="1" Grid.Column="1" Margin="3" ObjectReference="{Binding CleanupScript}" />
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Init function name" />
+        <local:UndertaleStringReference Grid.Row="2" Grid.Column="1" Margin="3" ObjectReference="{Binding InitScript}" />
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="Kind" />
+        <local:ComboBoxDark Grid.Row="3" Grid.Column="1" Margin="3"
+                            ItemsSource="{local:EnumValues undertale:UndertaleExtensionKind}" SelectedItem="{Binding Kind}" />
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Margin="3" Text="Functions" />
+        <DockPanel Grid.Row="4" Grid.Column="1" Margin="3">
+            <local:ButtonDark DockPanel.Dock="Bottom" HorizontalAlignment="Left" Margin="0,3,0,0"
+                              Content="Add" Click="Add_Click" />
+            <local:EditableDataGridDark x:Name="FunctionsList" ItemsSource="{Binding Functions}"
+                                        AutoGenerateColumns="False" HeadersVisibility="None"
+                                        GridLinesVisibility="All" SelectionMode="Single">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <local:UndertaleObjectReference Margin="20,0,0,0"
+                                                                ObjectReference="{Binding Path=., Mode=TwoWay}"
+                                                                ObjectType="{x:Type undertale:UndertaleExtensionFunction}" CanRemove="False" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </local:EditableDataGridDark>
+        </DockPanel>
+    </Grid>
+</local:DataUserControl>

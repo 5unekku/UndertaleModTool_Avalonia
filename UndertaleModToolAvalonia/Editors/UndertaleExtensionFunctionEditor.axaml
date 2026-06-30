@@ -1,0 +1,70 @@
+﻿<local:DataUserControl x:Class="UndertaleModTool.UndertaleExtensionFunctionEditor"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:UndertaleModTool"
+             xmlns:undertale="clr-namespace:UndertaleModLib.Models;assembly=UndertaleModLib"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Name" />
+        <local:UndertaleStringReference Grid.Row="0" Grid.Column="1" Margin="3" ObjectReference="{Binding Name}" />
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="External Name" />
+        <local:UndertaleStringReference Grid.Row="1" Grid.Column="1" Margin="3" ObjectReference="{Binding ExtName}" />
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="ID" />
+        <local:TextBoxDark Grid.Row="2" Grid.Column="1" Margin="3" Text="{Binding ID}" />
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="Kind" />
+        <local:TextBoxDark Grid.Row="3" Grid.Column="1" Margin="3" Text="{Binding Kind}" />
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Margin="3" Text="Return Type" />
+        <local:ComboBoxDark Grid.Row="4" Grid.Column="1" Margin="3"
+                            ItemsSource="{local:EnumValues undertale:UndertaleExtensionVarType}" SelectedItem="{Binding RetType}" />
+
+        <TextBlock Grid.Row="5" Grid.Column="0" Margin="3" Text="Argument Types" />
+        <DockPanel Grid.Row="5" Grid.Column="1" Margin="3">
+            <local:ButtonDark DockPanel.Dock="Bottom" HorizontalAlignment="Left" Margin="0,3,0,0"
+                              Content="Add" Click="Add_Click" />
+            <local:EditableDataGridDark x:Name="ArgumentTypesList" ItemsSource="{Binding Arguments}"
+                                        AutoGenerateColumns="False" HeadersVisibility="None"
+                                        GridLinesVisibility="All" SelectionMode="Single">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <local:ComboBoxDark Margin="20,0,0,0"
+                                                    ItemsSource="{local:EnumValues undertale:UndertaleExtensionVarType}"
+                                                    SelectedItem="{Binding Type, Mode=TwoWay}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </local:EditableDataGridDark>
+        </DockPanel>
+
+        <StackPanel Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2">
+            <TextBlock Foreground="Red" FontStyle="Italic">
+                Runner literally doesn't care about the 'Kind' value.
+                <LineBreak />
+                The 'ID' does matter though, so make sure you don't have any overlaps.
+            </TextBlock>
+        </StackPanel>
+    </Grid>
+</local:DataUserControl>
