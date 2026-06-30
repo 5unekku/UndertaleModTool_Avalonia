@@ -1,0 +1,35 @@
+﻿<local:DataUserControl x:Class="UndertaleModTool.UndertaleRoomRenderer"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:UndertaleModTool"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid RowDefinitions="Auto,*">
+        <Border Grid.Row="0" Background="#202020" ZIndex="1">
+            <TextBlock x:Name="CaptionText" HorizontalAlignment="Center" FontSize="14" FontStyle="Italic" Margin="5" />
+        </Border>
+        <Border Grid.Row="1" x:Name="RoomBorder" Background="Gray" ClipToBounds="True">
+            <ItemsControl x:Name="CanvasItems">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.Styles>
+                    <Style Selector="ContentPresenter">
+                        <Setter Property="Canvas.Left" Value="{Binding X}" />
+                        <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                    </Style>
+                </ItemsControl.Styles>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="local:RoomDrawable">
+                        <Image Source="{Binding Image}" Width="{Binding Width}" Height="{Binding Height}" Opacity="{Binding Opacity}"
+                               RenderOptions.BitmapInterpolationMode="None" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Border>
+    </Grid>
+</local:DataUserControl>

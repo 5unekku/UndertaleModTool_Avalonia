@@ -19,7 +19,6 @@ namespace UndertaleModTool
     /// </summary>
     public partial class UndertaleRoomEditor : DataUserControl
     {
-        private static readonly UndertaleCachedImageLoader imageLoader = new();
         private double zoom = 1.0;
 
         public UndertaleRoomEditor()
@@ -63,52 +62,7 @@ namespace UndertaleModTool
             RoomObjectsTree.ItemsSource = groups;
         }
 
-        // collects the room's drawable instances (GMS2 instance layers, else GMS1 GameObjects) as positioned sprites
-        private List<RoomDrawable> BuildDrawables(UndertaleRoom room)
-        {
-            var drawables = new List<RoomDrawable>();
-
-            IEnumerable<GameObjectInstance> instances;
-            if (room.Layers is { Count: > 0 })
-            {
-                var list = new List<GameObjectInstance>();
-                foreach (RoomLayer layer in room.Layers)
-                    if (layer.InstancesData?.Instances is not null)
-                        list.AddRange(layer.InstancesData.Instances);
-                instances = list;
-            }
-            else
-            {
-                instances = room.GameObjects;
-            }
-
-            foreach (GameObjectInstance instance in instances)
-            {
-                UndertaleSprite sprite = instance.ObjectDefinition?.Sprite;
-                if (sprite is null || sprite.Textures.Count == 0)
-                    continue;
-                UndertaleTexturePageItem texture = sprite.Textures[0]?.Texture;
-                if (texture is null)
-                    continue;
-
-                if (imageLoader.Convert(texture, typeof(Bitmap), null, CultureInfo.InvariantCulture) is not Bitmap bitmap)
-                    continue;
-
-                double scaleX = instance.ScaleX == 0 ? 1 : instance.ScaleX;
-                double scaleY = instance.ScaleY == 0 ? 1 : instance.ScaleY;
-                drawables.Add(new RoomDrawable
-                {
-                    Image = bitmap,
-                    Width = texture.SourceWidth * scaleX,
-                    Height = texture.SourceHeight * scaleY,
-                    X = instance.X - sprite.OriginX * scaleX,
-                    Y = instance.Y - sprite.OriginY * scaleY,
-                    Opacity = (instance.Color >> 24) / 255.0
-                });
-            }
-
-            return drawables;
-        }
+        private List<RoomDrawable> BuildDrawables(UndertaleRoom room) => RoomDrawable.BuildFor(room);
 
         private void RoomObjectsTree_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -151,11 +105,62 @@ namespace UndertaleModTool
     /// <summary>a single positioned sprite rendered on the room canvas.</summary>
     public class RoomDrawable
     {
+        private static readonly UndertaleCachedImageLoader imageLoader = new();
+
         public Bitmap Image { get; set; }
         public double X { get; set; }
         public double Y { get; set; }
         public double Width { get; set; }
         public double Height { get; set; }
         public double Opacity { get; set; } = 1.0;
+
+        /// <summary>builds the positioned-sprite drawables for a room (GMS2 instance layers, else GMS1 GameObjects).</summary>
+        public static List<RoomDrawable> BuildFor(UndertaleRoom room)
+        {
+            var drawables = new List<RoomDrawable>();
+            if (room is null)
+                return drawables;
+
+            IEnumerable<UndertaleRoom.GameObject> instances;
+            if (room.Layers is { Count: > 0 })
+            {
+                var list = new List<UndertaleRoom.GameObject>();
+                foreach (UndertaleRoom.Layer layer in room.Layers)
+                    if (layer.InstancesData?.Instances is not null)
+                        list.AddRange(layer.InstancesData.Instances);
+                instances = list;
+            }
+            else
+            {
+                instances = room.GameObjects;
+            }
+
+            foreach (UndertaleRoom.GameObject instance in instances)
+            {
+                UndertaleSprite sprite = instance.ObjectDefinition?.Sprite;
+                if (sprite is null || sprite.Textures.Count == 0)
+                    continue;
+                UndertaleTexturePageItem texture = sprite.Textures[0]?.Texture;
+                if (texture is null)
+                    continue;
+
+                if (imageLoader.Convert(texture, typeof(Bitmap), null, CultureInfo.InvariantCulture) is not Bitmap bitmap)
+                    continue;
+
+                double scaleX = instance.ScaleX == 0 ? 1 : instance.ScaleX;
+                double scaleY = instance.ScaleY == 0 ? 1 : instance.ScaleY;
+                drawables.Add(new RoomDrawable
+                {
+                    Image = bitmap,
+                    Width = texture.SourceWidth * scaleX,
+                    Height = texture.SourceHeight * scaleY,
+                    X = instance.X - sprite.OriginX * scaleX,
+                    Y = instance.Y - sprite.OriginY * scaleY,
+                    Opacity = (instance.Color >> 24) / 255.0
+                });
+            }
+
+            return drawables;
+        }
     }
 }
