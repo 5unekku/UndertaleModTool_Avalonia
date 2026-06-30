@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using UndertaleModLib;
+using UndertaleModLib.Models;
 using UndertaleModLib.Project;
 
 namespace UndertaleModTool
@@ -27,6 +28,11 @@ namespace UndertaleModTool
 
         /// <summary>true when the loaded data is GameMaker Studio 2 or newer (was a Visibility in wpf).</summary>
         public bool IsGMS2 => (Data?.GeneralInfo?.Major ?? 0) >= 2;
+
+        /// <summary>true when the data version supports extension product IDs (drives the extension editor field).</summary>
+        public bool IsExtProductIDEligible =>
+            Data?.GeneralInfo is UndertaleGeneralInfo info
+            && (info.Major >= 2 || (info.Major == 1 && (info.Build >= 1773 || info.Build == 1539)));
 
         /// <summary>navigates the tree/editor to the given resource. (full implementation: phase 9)</summary>
         public void ChangeSelection(object newsel, bool inNewTab = false)

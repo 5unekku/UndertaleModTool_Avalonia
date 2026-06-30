@@ -1,0 +1,113 @@
+﻿<local:DataUserControl x:Class="UndertaleModTool.UndertaleExtensionEditor"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:UndertaleModTool"
+             xmlns:undertale="clr-namespace:UndertaleModLib.Models;assembly=UndertaleModLib"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <local:ByteArrayConverter x:Key="byteArrayConverter" />
+        <local:IsVersionAtLeastConverter x:Key="IsVersionAtLeastConverter" />
+        <local:OptionValueConverter x:Key="OptionValueConverter" />
+    </UserControl.Resources>
+    <Grid ColumnDefinitions="1*,3*">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Name" />
+        <local:UndertaleStringReference Grid.Row="1" Grid.Column="1" Margin="3" ObjectReference="{Binding Name}" />
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Version"
+                   IsVisible="{Binding Mode=OneTime, Converter={StaticResource IsVersionAtLeastConverter}, ConverterParameter=2023.4}" />
+        <local:UndertaleStringReference Grid.Row="2" Grid.Column="1" Margin="3" ObjectReference="{Binding Version}"
+                                        IsVisible="{Binding Mode=OneTime, Converter={StaticResource IsVersionAtLeastConverter}, ConverterParameter=2023.4}" />
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="Class Name" />
+        <local:UndertaleStringReference Grid.Row="3" Grid.Column="1" Margin="3" ObjectReference="{Binding ClassName}" />
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Margin="3" Text="Files" />
+        <local:EditableDataGridDark Grid.Row="4" Grid.Column="1" Margin="3" ItemsSource="{Binding Files}"
+                            AutoGenerateColumns="False" HeadersVisibility="Column" GridLinesVisibility="All" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Files" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <local:UndertaleObjectReference Margin="20,0,0,0" ObjectReference="{Binding ., Mode=TwoWay}" ObjectType="{x:Type undertale:UndertaleExtensionFile}" CanRemove="False" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </local:EditableDataGridDark>
+        <local:ButtonDark Grid.Row="5" Grid.Column="1" Content="Add new extension file" Click="NewFileButton_Click" />
+
+        <TextBlock Grid.Row="6" Grid.Column="0" Margin="3,13,3,3" Text="Options"
+                   IsVisible="{Binding Mode=OneTime, Converter={StaticResource IsVersionAtLeastConverter}, ConverterParameter=2022.6}" />
+        <local:EditableDataGridDark Grid.Row="6" Grid.Column="1" Margin="3,13,3,3" x:Name="OptionsGrid" ItemsSource="{Binding Options, Mode=OneWay}"
+                            AutoGenerateColumns="False" HeadersVisibility="Column" GridLinesVisibility="All" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Name" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <local:UndertaleStringReference Margin="20,0,0,0" ObjectReference="{Binding Name}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Value" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ContentControl Content="{Binding Kind, Mode=OneWay}">
+                                <ContentControl.ContentTemplate>
+                                    <local:OptionValueTemplateSelector>
+                                        <local:OptionValueTemplateSelector.StringTemplate>
+                                            <DataTemplate>
+                                                <local:TextBoxDark Text="{Binding DataContext.Value.Content, RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}}" />
+                                            </DataTemplate>
+                                        </local:OptionValueTemplateSelector.StringTemplate>
+                                        <local:OptionValueTemplateSelector.BooleanTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding DataContext.Value.Content, RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}, Converter={StaticResource OptionValueConverter}, ConverterParameter=boolean}"
+                                                          VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                            </DataTemplate>
+                                        </local:OptionValueTemplateSelector.BooleanTemplate>
+                                        <local:OptionValueTemplateSelector.NumberTemplate>
+                                            <DataTemplate>
+                                                <local:TextBoxDark Text="{Binding DataContext.Value.Content, RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}, Converter={StaticResource OptionValueConverter}, ConverterParameter=number}" />
+                                            </DataTemplate>
+                                        </local:OptionValueTemplateSelector.NumberTemplate>
+                                    </local:OptionValueTemplateSelector>
+                                </ContentControl.ContentTemplate>
+                            </ContentControl>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Kind" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <local:ComboBoxDark ItemsSource="{local:EnumValues undertale:UndertaleExtensionOption+OptionKind}" SelectedItem="{Binding Kind}"
+                                                SelectionChanged="KindComboBox_SelectionChanged" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </local:EditableDataGridDark>
+        <local:ButtonDark Grid.Row="7" Grid.Column="1" Content="Add new extension option" Click="NewOptionButton_Click" Margin="0,0,0,6"
+                          IsVisible="{Binding Mode=OneTime, Converter={StaticResource IsVersionAtLeastConverter}, ConverterParameter=2022.6}" />
+
+        <TextBlock Grid.Row="8" Grid.Column="0" Margin="3" Text="Product ID" IsVisible="{Binding DataContext.IsExtProductIDEligible, RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}}" />
+        <local:TextBoxDark Background="#FF333333" Foreground="#FFFFFFFF" Grid.Row="8" Grid.Column="1" Margin="3" IsVisible="{Binding DataContext.IsExtProductIDEligible, RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}}" Text="{Binding ProductIdData, RelativeSource={RelativeSource AncestorType={x:Type local:UndertaleExtensionEditor}}, Mode=TwoWay, Converter={StaticResource byteArrayConverter}}" />
+
+        <StackPanel Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2">
+            <TextBlock Foreground="Red" FontStyle="Italic">
+                THINGS TO NOTE:<LineBreak />
+                - Keep in mind that .gml files are either not present, or will be empty. (e.g. no functions)<LineBreak />
+                  Because they are prebaked into GML scripts. That is completely normal.
+            </TextBlock>
+        </StackPanel>
+    </Grid>
+</local:DataUserControl>
