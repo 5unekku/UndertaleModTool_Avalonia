@@ -1,0 +1,31 @@
+﻿<local:DataUserControl x:Class="UndertaleModTool.UndertaleGlobalInitEditor"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:UndertaleModTool"
+             xmlns:undertaleModels="clr-namespace:UndertaleModLib.Models;assembly=UndertaleModLib"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <DockPanel>
+        <TextBlock DockPanel.Dock="Top" Text="Global initialization scripts" FontWeight="Bold" />
+        <Separator DockPanel.Dock="Top" />
+        <local:ButtonDark DockPanel.Dock="Bottom" HorizontalAlignment="Left" Margin="3" Content="Add" Click="Add_Click" />
+        <local:EditableDataGridDark x:Name="ScriptsGrid" Margin="3" ItemsSource="{Binding GlobalInits}"
+                                    AutoGenerateColumns="False" HeadersVisibility="None"
+                                    GridLinesVisibility="All" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <local:UndertaleObjectReference Margin="20,0,0,0"
+                                                            ObjectReference="{Binding Code, Mode=TwoWay}"
+                                                            Loaded="UndertaleObjectReference_Loaded"
+                                                            ObjectType="{x:Type undertaleModels:UndertaleCode}" CanRemove="True" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </local:EditableDataGridDark>
+    </DockPanel>
+</local:DataUserControl>
