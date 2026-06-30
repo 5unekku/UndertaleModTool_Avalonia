@@ -40,6 +40,10 @@ namespace UndertaleModTool
             if (gmlHighlighting is not null)
                 DecompiledEditor.SyntaxHighlighting = gmlHighlighting;
 
+            // in-editor find (Ctrl+F), same as the wpf code editor's search
+            AvaloniaEdit.Search.SearchPanel.Install(DecompiledEditor);
+            AvaloniaEdit.Search.SearchPanel.Install(DisassemblyEditor);
+
             DataContextChanged += (_, _) => ShowCode();
         }
 
