@@ -200,20 +200,24 @@ namespace UndertaleModTool
         }
 
         public Task ClickableSearchOutput(string title, string query, int resultsCount, IOrderedEnumerable<KeyValuePair<string, List<(int lineNum, string codeLine)>>> resultsDict, bool showInDecompiledView, IOrderedEnumerable<string> failedList = null)
-            => ClickableSearchOutput(title, query, resultsCount, (IDictionary<string, List<(int, string)>>)resultsDict.ToDictionary(x => x.Key, x => x.Value), showInDecompiledView, failedList);
+        {
+            Dispatcher.UIThread.Invoke(() =>
+            {
+                var window = new Windows.ClickableTextOutput(title, query, resultsCount, resultsDict, showInDecompiledView, failedList);
+                window.GenerateResults();
+                window.Show();
+            });
+            return Task.CompletedTask;
+        }
 
         public Task ClickableSearchOutput(string title, string query, int resultsCount, IDictionary<string, List<(int lineNum, string codeLine)>> resultsDict, bool showInDecompiledView, IEnumerable<string> failedList = null)
         {
-            // the clickable rich-text results window is not ported yet; show a plain text summary instead
-            var builder = new StringBuilder();
-            builder.AppendLine($"{resultsCount} results for \"{query}\":\n");
-            foreach (var entry in resultsDict)
+            Dispatcher.UIThread.Invoke(() =>
             {
-                builder.AppendLine(entry.Key);
-                foreach (var (lineNum, codeLine) in entry.Value)
-                    builder.AppendLine($"  Line {lineNum}: {codeLine}");
-            }
-            SimpleTextOutput(title, query, builder.ToString(), true);
+                var window = new Windows.ClickableTextOutput(title, query, resultsCount, resultsDict, showInDecompiledView, failedList);
+                window.GenerateResults();
+                window.Show();
+            });
             return Task.CompletedTask;
         }
 

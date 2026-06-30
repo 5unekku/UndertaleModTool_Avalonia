@@ -62,6 +62,9 @@ namespace UndertaleModTool
             }
         }
 
+        /// <summary>whether the editor host has an editor/viewer template for the given asset.</summary>
+        public bool HasEditorForAsset(object obj) => obj is UndertaleModLib.UndertaleResource;
+
         /// <summary>opens a code entry (by name) in the editor host. line/tab targeting is not yet implemented.</summary>
         public void OpenCodeEntry(string codeName, int lineNumber = -1, UndertaleCodeEditor.CodeEditorTab tab = UndertaleCodeEditor.CodeEditorTab.Unknown, bool inNewTab = false)
         {

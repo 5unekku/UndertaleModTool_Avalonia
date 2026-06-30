@@ -1,0 +1,29 @@
+﻿<Window x:Class="UndertaleModTool.ProjectAssetsWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UndertaleModTool"
+        mc:Ignorable="d"
+        Title="Unexported project assets" Height="450" Width="800" WindowStartupLocation="CenterOwner">
+    <DockPanel>
+        <Grid x:Name="RootGrid" Margin="10" RowDefinitions="Auto,Auto,Auto">
+            <TextBlock Grid.Row="0" TextWrapping="Wrap" Text="Below is a list of all assets currently waiting to be exported to disk for the current project, once it is next saved." />
+            <TextBlock Grid.Row="1" TextWrapping="Wrap" Text="To quickly add or remove assets from being part of the project, you can drag and drop assets here, or delete them." />
+            <DataGrid Grid.Row="2" Margin="0,8,0,0" MinHeight="300" x:Name="AssetsListView" IsReadOnly="True"
+                      FontFamily="Consolas" SelectionMode="Extended" DoubleTapped="AssetsListView_DoubleTapped" KeyDown="AssetsListView_KeyDown">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Open" Click="MenuItemOpen_Click" />
+                        <MenuItem Header="Open in new tab" Click="MenuItemOpenInNewTab_Click" />
+                        <MenuItem Header="Unmark for export" Click="MenuItemUnmarkForExport_Click" />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="Auto" />
+                    <DataGridTextColumn Header="Asset Type" Binding="{Binding AssetType}" Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </DockPanel>
+</Window>

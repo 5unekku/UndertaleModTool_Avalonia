@@ -1,0 +1,22 @@
+﻿<Window x:Class="UndertaleModTool.RuntimePicker"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UndertaleModTool"
+        mc:Ignorable="d"
+        Title="Runtime picker" Height="300" Width="700" WindowStartupLocation="CenterOwner">
+    <Grid Margin="10" ColumnDefinitions="*,*,*,*" RowDefinitions="Auto,*,Auto">
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" Margin="3" Text="Select the runtime you want to use" />
+
+        <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Margin="3" x:Name="Picker"
+                  ItemsSource="{Binding Runtimes}" SelectionMode="Single" IsReadOnly="True" SelectedIndex="0">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Version" Binding="{Binding Version}" Width="Auto" />
+                <DataGridTextColumn Header="Path" Binding="{Binding Path}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <local:ButtonDark Grid.Row="2" Grid.Column="3" Margin="3" Content="Continue" Click="Button_Click" />
+    </Grid>
+</Window>
