@@ -35,7 +35,7 @@
                 </Grid>
 
                 <TextBlock Text="Contents" FontWeight="Bold" Margin="3,10,3,3" />
-                <TreeView x:Name="RoomObjectsTree" MaxHeight="280" SelectionChanged="RoomObjectsTree_SelectionChanged">
+                <TreeView x:Name="RoomObjectsTree" MaxHeight="280" SelectionChanged="RoomObjectsTree_SelectionChanged" DoubleTapped="RoomObjectsTree_DoubleTapped">
                     <TreeView.DataTemplates>
                         <TreeDataTemplate DataType="local:RoomTreeGroup" ItemsSource="{Binding Items}">
                             <TextBlock Text="{Binding Name}" FontWeight="Bold" />

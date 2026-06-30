@@ -70,6 +70,17 @@ namespace UndertaleModTool
             SelectedPanel.Content = selected is GameObjectInstance or RoomLayer ? selected : null;
         }
 
+        private void RoomObjectsTree_DoubleTapped(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            // double-clicking a tiles layer opens the tile painting editor
+            if (RoomObjectsTree.SelectedItem is RoomLayer { LayerType: UndertaleRoom.LayerType.Tiles } layer && layer.TilesData?.Background is not null)
+            {
+                new UndertaleTileEditor(layer).ShowDialogSync(MainWindow.Instance);
+                if (DataContext is UndertaleRoom room)
+                    CanvasItems.ItemsSource = BuildDrawables(room); // refresh after editing
+            }
+        }
+
         private void Canvas_PointerWheelChanged(object sender, PointerWheelEventArgs e)
         {
             // wheel zooms the room view (matches the wpf editor)

@@ -1,0 +1,30 @@
+﻿<Window x:Class="UndertaleModTool.UndertaleTileEditor"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UndertaleModTool"
+        mc:Ignorable="d"
+        Title="Edit Tile Data" Height="400" Width="800" MinHeight="300" MinWidth="300"
+        WindowStartupLocation="CenterOwner">
+    <Grid Margin="10" RowDefinitions="*,Auto">
+        <Grid Grid.Row="0" ColumnDefinitions="*,4,*">
+            <ScrollViewer Grid.Column="0" Background="DarkGray" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <Image x:Name="LayerImage" Source="{Binding LayerBitmap}" Width="{Binding EditWidth}" Height="{Binding EditHeight}"
+                       Stretch="None" RenderOptions.BitmapInterpolationMode="None" PointerPressed="Layer_PointerPressed" />
+            </ScrollViewer>
+            <GridSplitter Grid.Column="1" ResizeDirection="Columns" />
+            <ScrollViewer Grid.Column="2" Background="DarkGray" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <Image x:Name="PaletteImage" Source="{Binding PaletteBitmap}" Width="{Binding PaletteWidth}" Height="{Binding PaletteHeight}"
+                       Stretch="None" RenderOptions.BitmapInterpolationMode="None" PointerPressed="Palette_PointerPressed" />
+            </ScrollViewer>
+        </Grid>
+
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto">
+            <TextBlock Grid.Column="0" VerticalAlignment="Center" Margin="3"
+                       Text="Click a tile in the palette (right), then click/drag on the layer (left) to paint. Right-click erases." />
+            <local:ButtonDark Grid.Column="1" Margin="3" Padding="5,3" Content="Cancel" Click="CancelButton_Click" />
+            <local:ButtonDark Grid.Column="2" Margin="3" Padding="5,3" Content="Apply" Click="ApplyButton_Click" />
+        </Grid>
+    </Grid>
+</Window>

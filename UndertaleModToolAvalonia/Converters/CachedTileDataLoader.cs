@@ -29,14 +29,14 @@ namespace UndertaleModTool
             return BuildLayerBitmap(tilesData);
         }
 
-        public static Bitmap BuildLayerBitmap(Layer.LayerTilesData tilesData)
+        public static Bitmap BuildLayerBitmap(Layer.LayerTilesData tilesData, bool useCache = true)
         {
             if (tilesData?.Background is not UndertaleBackground tilesBG || tilesBG.Texture is null)
                 return null;
             if (tilesData.TileData is null || tilesData.TilesX == 0 || tilesData.TilesY == 0)
                 return null;
 
-            if (layerCache.TryGetValue(tilesData, out var weak) && weak.TryGetTarget(out Bitmap cached))
+            if (useCache && layerCache.TryGetValue(tilesData, out var weak) && weak.TryGetTarget(out Bitmap cached))
                 return cached;
 
             try
