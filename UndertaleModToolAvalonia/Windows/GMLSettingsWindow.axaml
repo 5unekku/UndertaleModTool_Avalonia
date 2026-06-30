@@ -1,0 +1,83 @@
+﻿<Window x:Class="UndertaleModTool.GMLSettingsWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UndertaleModTool"
+        mc:Ignorable="d"
+        Title="Settings - GML compiler/decompiler" Width="700" SizeToContent="Height" WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <local:IndentStyleConverter x:Key="IndentStyleConverter" />
+    </Window.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <TextBlock Text="General settings (compiler &amp; decompiler)" Margin="10,10,10,4" FontWeight="Bold" />
+            <Grid Margin="10,0,10,10" ColumnDefinitions="Auto,*,Auto,*">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="3" Content="Use CSS hex color literals" IsChecked="{Binding DecompilerSettings.UseCSSColors}" />
+                <TextBlock Grid.Row="1" Grid.Column="2" Margin="3" Text="Named instance ID prefix:" />
+                <local:TextBoxDark Grid.Row="1" Grid.Column="3" Margin="3" Text="{Binding InstanceIdPrefix}" />
+            </Grid>
+            <Separator Margin="10,0,10,0" />
+            <TextBlock Text="Decompiler settings" Margin="10,10,10,4" FontWeight="Bold" />
+            <Grid Margin="10,0,10,3" ColumnDefinitions="Auto,*,Auto,*">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="3" Content="Always use semicolons" IsChecked="{Binding DecompilerSettings.UseSemicolon}" />
+                <TextBlock Grid.Row="0" Grid.Column="2" Margin="3,3,6,3" Text="Indentation style:" />
+                <local:ComboBoxDark Grid.Row="0" Grid.Column="3" ItemsSource="{local:EnumValues local:DecompilerSettings+IndentStyleKind}" SelectedItem="{Binding DecompilerSettings.IndentStyle}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource IndentStyleConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </local:ComboBoxDark>
+
+                <CheckBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="3" Content="Open block braces on same line" IsChecked="{Binding DecompilerSettings.OpenBlockBraceOnSameLine}" />
+                <CheckBox Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Margin="3" Content="Remove block braces if single line" IsChecked="{Binding DecompilerSettings.RemoveSingleLineBlockBraces}" />
+                <CheckBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="3" Content="Create enum declarations" IsChecked="{Binding DecompilerSettings.CreateEnumDeclarations}" />
+                <CheckBox Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" Margin="3" Content="Enum/macro declarations at top of code" IsChecked="{Binding DecompilerSettings.MacroDeclarationsAtTop}" />
+                <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="3" Content="Print warnings" IsChecked="{Binding DecompilerSettings.PrintWarnings}" />
+                <CheckBox Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="2" Margin="3" Content="Allow leftover data on VM stack" IsChecked="{Binding DecompilerSettings.AllowLeftoverDataOnStack}" />
+            </Grid>
+
+            <Grid Margin="10,3,10,3" ColumnDefinitions="110,*,Auto,*">
+                <TextBlock Grid.Column="0" Margin="3" Text="Add empty lines:" />
+                <Grid Grid.Column="2" Margin="3" ColumnDefinitions="Auto,Auto">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <CheckBox Grid.Row="0" Grid.Column="0" Margin="3" Content="Around branch statements" IsChecked="{Binding DecompilerSettings.EmptyLineAroundBranchStatements}" />
+                    <CheckBox Grid.Row="0" Grid.Column="1" Margin="3" Content="After local variable declarations" IsChecked="{Binding DecompilerSettings.EmptyLineAfterBlockLocals}" />
+                    <CheckBox Grid.Row="1" Grid.Column="0" Margin="3" Content="Before switch cases" IsChecked="{Binding DecompilerSettings.EmptyLineBeforeSwitchCases}" />
+                    <CheckBox Grid.Row="1" Grid.Column="1" Margin="3" Content="After switch cases" IsChecked="{Binding DecompilerSettings.EmptyLineAfterSwitchCases}" />
+                    <CheckBox Grid.Row="2" Grid.Column="0" Margin="3" Content="Around function declarations" IsChecked="{Binding DecompilerSettings.EmptyLineAroundFunctionDeclarations}" />
+                    <CheckBox Grid.Row="2" Grid.Column="1" Margin="3" Content="Around static initialization" IsChecked="{Binding DecompilerSettings.EmptyLineAroundStaticInitialization}" />
+                </Grid>
+            </Grid>
+
+            <Grid Margin="10,3,10,10" ColumnDefinitions="110,*,Auto,*">
+                <TextBlock Grid.Column="0" Margin="3" Text="Perform cleanups:" />
+                <Grid Grid.Column="2" Margin="3" ColumnDefinitions="Auto,Auto">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <CheckBox Grid.Row="0" Grid.Column="0" Margin="3" Content="Try/catch/finally rewriting" IsChecked="{Binding DecompilerSettings.CleanupTry}" />
+                    <CheckBox Grid.Row="0" Grid.Column="1" Margin="3" Content="Transform else into continue" IsChecked="{Binding DecompilerSettings.CleanupElseToContinue}" />
+                    <CheckBox Grid.Row="1" Grid.Column="0" Margin="3" Content="Default argument values" IsChecked="{Binding DecompilerSettings.CleanupDefaultArgumentValues}" />
+                    <CheckBox Grid.Row="1" Grid.Column="1" Margin="3" Content="Builtin array variable syntax" IsChecked="{Binding DecompilerSettings.CleanupBuiltinArrayVariables}" />
+                    <CheckBox Grid.Row="2" Grid.Column="0" Margin="3" Content="Scope local variable declarations" IsChecked="{Binding DecompilerSettings.CleanupLocalVarDeclarations}" />
+                </Grid>
+            </Grid>
+
+            <Separator Margin="10,0,10,0" />
+            <Grid Margin="10,10,10,10">
+                <local:ButtonDark Click="RestoreButton_Click" Padding="8,2,8,2" HorizontalAlignment="Right" x:Name="RestoreButton" Content="Restore to defaults" />
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</Window>
