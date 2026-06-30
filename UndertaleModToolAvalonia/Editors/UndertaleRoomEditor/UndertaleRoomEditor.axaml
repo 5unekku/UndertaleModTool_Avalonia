@@ -1,0 +1,63 @@
+﻿<local:DataUserControl x:Class="UndertaleModTool.UndertaleRoomEditor"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:UndertaleModTool"
+             xmlns:undertale="clr-namespace:UndertaleModLib.Models;assembly=UndertaleModLib"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <ScrollViewer>
+        <StackPanel>
+            <Border Margin="10" Background="LightGoldenrodYellow" BorderBrush="Goldenrod" BorderThickness="2" Padding="6">
+                <TextBlock TextWrapping="Wrap" Foreground="#665500"
+                           Text="Note: this is the basic room property view. The full interactive room editor (layer/instance/tile editing and the room renderer) is the largest remaining piece of the Avalonia port and is not yet available here." />
+            </Border>
+
+            <Grid ColumnDefinitions="1*,3*">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Name" />
+                <local:UndertaleStringReference Grid.Row="0" Grid.Column="1" Margin="3" ObjectReference="{Binding Name}" />
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Caption" />
+                <local:UndertaleStringReference Grid.Row="1" Grid.Column="1" Margin="3" ObjectReference="{Binding Caption}" />
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Size" />
+                <Grid Grid.Row="2" Grid.Column="1" ColumnDefinitions="*,*">
+                    <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding Width}" />
+                    <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding Height}" />
+                </Grid>
+
+                <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="Speed" />
+                <local:TextBoxDark Grid.Row="3" Grid.Column="1" Margin="3" Text="{Binding Speed}" />
+
+                <TextBlock Grid.Row="4" Grid.Column="0" Margin="3" Text="Persistent" />
+                <CheckBox Grid.Row="4" Grid.Column="1" Margin="3" IsChecked="{Binding Persistent}" />
+
+                <TextBlock Grid.Row="5" Grid.Column="0" Margin="3" Text="Background color" />
+                <local:ColorPicker HasAlpha="False" Grid.Row="5" Grid.Column="1" Margin="3" Color="{Binding BackgroundColor}" />
+
+                <TextBlock Grid.Row="6" Grid.Column="0" Margin="3" Text="Draw background color" />
+                <CheckBox Grid.Row="6" Grid.Column="1" Margin="3" IsChecked="{Binding DrawBackgroundColor}" />
+
+                <TextBlock Grid.Row="7" Grid.Column="0" Margin="3" Text="World" />
+                <local:TextBoxDark Grid.Row="7" Grid.Column="1" Margin="3" Text="{Binding World}" />
+
+                <TextBlock Grid.Row="8" Grid.Column="0" Margin="3" Text="Gravity X / Y" />
+                <Grid Grid.Row="8" Grid.Column="1" ColumnDefinitions="*,*">
+                    <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding GravityX}" />
+                    <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding GravityY}" />
+                </Grid>
+
+                <TextBlock Grid.Row="9" Grid.Column="0" Margin="3" Text="Meters per pixel" />
+                <local:TextBoxDark Grid.Row="9" Grid.Column="1" Margin="3" Text="{Binding MetersPerPixel}" />
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</local:DataUserControl>
