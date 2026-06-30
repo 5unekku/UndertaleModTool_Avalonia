@@ -224,6 +224,7 @@ namespace UndertaleModTool
         public void SetProgressBar(string message, string status, double progressValue, double maxValue)
             => SetStatus($"{status} {progressValue}/{maxValue}");
         public void SetProgressBar() { }
+        public void InitializeProgressDialog(string title, string status) => SetStatus(status);
         public void UpdateProgressValue(double progressValue) => SetStatus(progressValue.ToString());
         public void UpdateProgressStatus(string status) => SetStatus(status);
         public void AddProgress(int amount) => progressValue += amount;

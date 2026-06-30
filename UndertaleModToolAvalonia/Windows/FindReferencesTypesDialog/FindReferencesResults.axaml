@@ -1,0 +1,33 @@
+﻿<Window x:Class="UndertaleModTool.Windows.FindReferencesResults"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:utmt="clr-namespace:UndertaleModTool"
+        xmlns:local="clr-namespace:UndertaleModTool.Windows"
+        mc:Ignorable="d"
+        Title="The references" Height="600" Width="450"
+        WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="*" MinHeight="60" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Name="label" Text="The search results." HorizontalAlignment="Left" Padding="5" Margin="10,10,0,0"
+                   FontSize="22" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" MaxHeight="70" />
+        <Rectangle Grid.Row="1" Margin="10,0,20,0" Height="2" Fill="Gray" />
+
+        <utmt:TextBoxDark Grid.Row="2" x:Name="SearchBox" Watermark="Filter by name..." TextChanged="SearchBox_TextChanged" Margin="10,15,20,0" FontSize="14" />
+
+        <TreeView Grid.Row="3" Name="ResultsTree" Margin="10,5,20,0" FontSize="14"
+                  SelectionChanged="ResultsTree_SelectionChanged" DoubleTapped="ResultsTree_DoubleTapped" KeyUp="ResultsTree_KeyUp" />
+
+        <TextBlock Grid.Row="4" Text="Note: the results may be not 100% complete.&#x0a;Use one of the search scripts in the &quot;Find&quot; menu if necessary."
+                   Margin="10,0,20,0" FontStyle="Italic" Foreground="Gray" />
+
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,20">
+            <utmt:ButtonDark Content="Export results" FontSize="18" Width="144" Height="40" Click="ExportButton_Click" Margin="0,0,10,0" />
+            <utmt:ButtonDark Content="Done" FontSize="18" Width="134" Height="40" Click="DoneButton_Click" />
+        </StackPanel>
+    </Grid>
+</Window>

@@ -243,8 +243,12 @@ namespace UndertaleModTool
 
         private void FindAllReferencesItem_Click(object sender, RoutedEventArgs e)
         {
-            // TODO phase 8: open FindReferencesTypesDialog
-            mainWindow.ShowMessage("Find all references is not yet available in the Avalonia port.");
+            if (ObjectReference is not UndertaleModLib.UndertaleResource res || mainWindow.Data is null)
+            {
+                mainWindow.ShowMessage("This object cannot have its references searched.");
+                return;
+            }
+            new Windows.FindReferencesTypesDialog(res, mainWindow.Data).ShowDialogSync(mainWindow);
         }
 
         private void Remove_Click(object sender, RoutedEventArgs e)
