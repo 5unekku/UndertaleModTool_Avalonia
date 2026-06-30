@@ -1,0 +1,134 @@
+﻿<local:DataUserControl x:Class="UndertaleModTool.UndertaleTextureGroupInfoEditor"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:UndertaleModTool"
+             xmlns:undertale="clr-namespace:UndertaleModLib.Models;assembly=UndertaleModLib"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <local:NullToVisibilityConverter x:Key="NullToVisibilityConverter" nullValue="True" notNullValue="False" />
+        <local:NullToVisibilityConverter x:Key="NotNullToVisibilityConverter" nullValue="False" notNullValue="True" />
+        <local:BooleanToVisibilityConverter x:Key="BooleanTrueToVisibilityConverter" trueValue="True" falseValue="False" />
+        <local:BooleanToVisibilityConverter x:Key="BooleanFalseToVisibilityConverter" trueValue="False" falseValue="True" />
+        <local:IsGM2023Converter x:Key="IsGM2023Converter" />
+    </UserControl.Resources>
+
+    <StackPanel>
+        <TextBlock Text="Texture Group" FontWeight="Bold" />
+        <Separator />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Group Name" />
+            <local:UndertaleStringReference Grid.Row="0" Grid.Column="1" Margin="3" ObjectReference="{Binding Name}" />
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Texture Pages" />
+            <Expander Grid.Row="1" Grid.Column="1" Margin="3" Name="TextureListExpander" Header="List">
+                <DockPanel>
+                    <local:ButtonDark DockPanel.Dock="Bottom" HorizontalAlignment="Left" Margin="0,3,0,0" Content="Add" Click="AddTexture_Click" />
+                    <local:EditableDataGridDark ItemsSource="{Binding TexturePages}" MaxHeight="370" x:Name="TextureListGrid"
+                                                AutoGenerateColumns="False" HeadersVisibility="None" GridLinesVisibility="All" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <local:UndertaleObjectReference Margin="20,0,0,0" ObjectReference="{Binding Resource, Mode=TwoWay}" ObjectType="{x:Type undertale:UndertaleEmbeddedTexture}" CanRemove="False" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </local:EditableDataGridDark>
+                </DockPanel>
+            </Expander>
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Sprites" />
+            <Expander Grid.Row="2" Grid.Column="1" Margin="3" Name="SpriteListExpander" Header="List">
+                <DockPanel>
+                    <local:ButtonDark DockPanel.Dock="Bottom" HorizontalAlignment="Left" Margin="0,3,0,0" Content="Add" Click="AddSprite_Click" />
+                    <local:EditableDataGridDark ItemsSource="{Binding Sprites}" MaxHeight="370" x:Name="SpriteListGrid"
+                                                AutoGenerateColumns="False" HeadersVisibility="None" GridLinesVisibility="All" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <local:UndertaleObjectReference Margin="20,0,0,0" ObjectReference="{Binding Resource, Mode=TwoWay}" ObjectType="{x:Type undertale:UndertaleSprite}" CanRemove="False" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </local:EditableDataGridDark>
+                </DockPanel>
+            </Expander>
+
+            <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="Spine Sprites" />
+            <Expander Grid.Row="3" Grid.Column="1" Margin="3" Name="SpineSprListExpander" Header="List">
+                <DockPanel>
+                    <local:ButtonDark DockPanel.Dock="Bottom" HorizontalAlignment="Left" Margin="0,3,0,0" Content="Add" Click="AddSpineSprite_Click" />
+                    <local:EditableDataGridDark ItemsSource="{Binding SpineSprites}" MaxHeight="370" x:Name="SpineSprListGrid"
+                                                AutoGenerateColumns="False" HeadersVisibility="None" GridLinesVisibility="All" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <local:UndertaleObjectReference Margin="20,0,0,0" ObjectReference="{Binding Resource, Mode=TwoWay}" ObjectType="{x:Type undertale:UndertaleSprite}" CanRemove="False" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </local:EditableDataGridDark>
+                </DockPanel>
+            </Expander>
+
+            <TextBlock Grid.Row="4" Grid.Column="0" Margin="3" Text="Fonts" />
+            <Expander Grid.Row="4" Grid.Column="1" Margin="3" Name="FontListExpander" Header="List">
+                <DockPanel>
+                    <local:ButtonDark DockPanel.Dock="Bottom" HorizontalAlignment="Left" Margin="0,3,0,0" Content="Add" Click="AddFont_Click" />
+                    <local:EditableDataGridDark ItemsSource="{Binding Fonts}" MaxHeight="370" x:Name="FontListGrid"
+                                                AutoGenerateColumns="False" HeadersVisibility="None" GridLinesVisibility="All" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <local:UndertaleObjectReference Margin="20,0,0,0" ObjectReference="{Binding Resource, Mode=TwoWay}" ObjectType="{x:Type undertale:UndertaleFont}" CanRemove="False" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </local:EditableDataGridDark>
+                </DockPanel>
+            </Expander>
+
+            <TextBlock Grid.Row="5" Grid.Column="0" Margin="3" Text="Tilesets" />
+            <Expander Grid.Row="5" Grid.Column="1" Margin="3" Name="TilesetListExpander" Header="List">
+                <DockPanel>
+                    <local:ButtonDark DockPanel.Dock="Bottom" HorizontalAlignment="Left" Margin="0,3,0,0" Content="Add" Click="AddTileset_Click" />
+                    <local:EditableDataGridDark ItemsSource="{Binding Tilesets}" MaxHeight="370" x:Name="TilesetListGrid"
+                                                AutoGenerateColumns="False" HeadersVisibility="None" GridLinesVisibility="All" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Width="*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <local:UndertaleObjectReference Margin="20,0,0,0" ObjectReference="{Binding Resource, Mode=TwoWay}" ObjectType="{x:Type undertale:UndertaleBackground}" CanRemove="False" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </local:EditableDataGridDark>
+                </DockPanel>
+            </Expander>
+        </Grid>
+    </StackPanel>
+</local:DataUserControl>
