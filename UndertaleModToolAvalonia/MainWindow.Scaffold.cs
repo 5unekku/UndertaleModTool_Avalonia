@@ -34,16 +34,21 @@ namespace UndertaleModTool
             Data?.GeneralInfo is UndertaleGeneralInfo info
             && (info.Major >= 2 || (info.Major == 1 && (info.Build >= 1773 || info.Build == 1539)));
 
-        /// <summary>navigates the tree/editor to the given resource. (full implementation: phase 9)</summary>
+        /// <summary>
+        /// shows the given resource in the right-hand editor host (the DataTemplates in MainWindow.axaml pick the
+        /// matching editor). the wpf tab system is not yet ported, so a "new tab" just replaces the current view.
+        /// </summary>
         public void ChangeSelection(object newsel, bool inNewTab = false)
         {
-            // TODO phase 9: real tree selection + tab handling
+            Highlighted = newsel;
+            if (DataEditor is not null)
+                DataEditor.Content = newsel;
         }
 
-        /// <summary>opens the given resource in a tab. (full implementation: phase 9)</summary>
+        /// <summary>opens the given resource in the editor host (tabs not yet ported).</summary>
         internal void OpenInTab(object obj, bool isNewTab = false, string tabTitle = null)
         {
-            // TODO phase 9: real tab host
+            ChangeSelection(obj, isNewTab);
         }
 
         /// <summary>prompts to save the current data file. (full implementation: phase 9)</summary>
