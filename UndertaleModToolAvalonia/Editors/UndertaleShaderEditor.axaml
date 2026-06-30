@@ -1,0 +1,105 @@
+﻿<local:DataUserControl x:Class="UndertaleModTool.UndertaleShaderEditor"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:UndertaleModTool"
+             xmlns:undertale="clr-namespace:UndertaleModLib.Models;assembly=UndertaleModLib"
+             xmlns:ae="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Name" />
+        <local:UndertaleStringReference Grid.Row="0" Grid.Column="1" Margin="3" ObjectReference="{Binding Name}" />
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Type" />
+        <local:ComboBoxDark Grid.Row="1" Grid.Column="1" Margin="3"
+                            ItemsSource="{local:EnumValues undertale:UndertaleShader+ShaderType}" SelectedItem="{Binding Type}" />
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="GLSL ES vertex source" />
+        <Expander Grid.Row="2" Grid.Column="1" Margin="3" Header="Code">
+            <ae:TextEditor DataContext="{Binding GLSL_ES_Vertex}" FontFamily="Consolas" WordWrap="True" FontSize="13"
+                           Padding="4" Background="#222222" Foreground="#C0C0C0" MaxHeight="300"
+                           BorderBrush="#FFABADB3" BorderThickness="1" LineNumbersForeground="#DBDBDB" ShowLineNumbers="True"
+                           Loaded="TextEditor_Loaded" LostFocus="TextEditor_LostFocus" DataContextChanged="TextEditor_DataContextChanged" />
+        </Expander>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="GLSL ES fragment source" />
+        <Expander Grid.Row="3" Grid.Column="1" Margin="3" Header="Code">
+            <ae:TextEditor DataContext="{Binding GLSL_ES_Fragment}" FontFamily="Consolas" WordWrap="True" FontSize="13"
+                           Padding="4" Background="#222222" Foreground="#C0C0C0" MaxHeight="300"
+                           BorderBrush="#FFABADB3" BorderThickness="1" LineNumbersForeground="#DBDBDB" ShowLineNumbers="True"
+                           Loaded="TextEditor_Loaded" LostFocus="TextEditor_LostFocus" DataContextChanged="TextEditor_DataContextChanged" />
+        </Expander>
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Margin="3" Text="GLSL vertex source" />
+        <Expander Grid.Row="4" Grid.Column="1" Margin="3" Header="Code">
+            <ae:TextEditor DataContext="{Binding GLSL_Vertex}" FontFamily="Consolas" WordWrap="True" FontSize="13"
+                           Padding="4" Background="#222222" Foreground="#C0C0C0" MaxHeight="300"
+                           BorderBrush="#FFABADB3" BorderThickness="1" LineNumbersForeground="#DBDBDB" ShowLineNumbers="True"
+                           Loaded="TextEditor_Loaded" LostFocus="TextEditor_LostFocus" DataContextChanged="TextEditor_DataContextChanged" />
+        </Expander>
+
+        <TextBlock Grid.Row="5" Grid.Column="0" Margin="3" Text="GLSL fragment source" />
+        <Expander Grid.Row="5" Grid.Column="1" Margin="3" Header="Code">
+            <ae:TextEditor DataContext="{Binding GLSL_Fragment}" FontFamily="Consolas" WordWrap="True" FontSize="13"
+                           Padding="4" Background="#222222" Foreground="#C0C0C0" MaxHeight="300"
+                           BorderBrush="#FFABADB3" BorderThickness="1" LineNumbersForeground="#DBDBDB" ShowLineNumbers="True"
+                           Loaded="TextEditor_Loaded" LostFocus="TextEditor_LostFocus" DataContextChanged="TextEditor_DataContextChanged" />
+        </Expander>
+
+        <TextBlock Grid.Row="6" Grid.Column="0" Margin="3" Text="HLSL9 vertex source" />
+        <Expander Grid.Row="6" Grid.Column="1" Margin="3" Header="Code">
+            <ae:TextEditor DataContext="{Binding HLSL9_Vertex}" FontFamily="Consolas" WordWrap="True" FontSize="13"
+                           Padding="4" Background="#222222" Foreground="#C0C0C0" MaxHeight="300"
+                           BorderBrush="#FFABADB3" BorderThickness="1" LineNumbersForeground="#DBDBDB" ShowLineNumbers="True"
+                           Loaded="TextEditor_Loaded" LostFocus="TextEditor_LostFocus" DataContextChanged="TextEditor_DataContextChanged" />
+        </Expander>
+
+        <TextBlock Grid.Row="7" Grid.Column="0" Margin="3" Text="HLSL9 fragment source" />
+        <Expander Grid.Row="7" Grid.Column="1" Margin="3" Header="Code">
+            <ae:TextEditor DataContext="{Binding HLSL9_Fragment}" FontFamily="Consolas" WordWrap="True" FontSize="13"
+                           Padding="4" Background="#222222" Foreground="#C0C0C0" MaxHeight="300"
+                           BorderBrush="#FFABADB3" BorderThickness="1" LineNumbersForeground="#DBDBDB" ShowLineNumbers="True"
+                           Loaded="TextEditor_Loaded" LostFocus="TextEditor_LostFocus" DataContextChanged="TextEditor_DataContextChanged" />
+        </Expander>
+
+        <TextBlock Grid.Row="8" Grid.Column="0" Margin="3" Text="Vertex shader attributes" />
+        <DockPanel Grid.Row="8" Grid.Column="1" Margin="3">
+            <local:ButtonDark DockPanel.Dock="Bottom" HorizontalAlignment="Left" Margin="0,3,0,0" Content="Add" Click="Add_Click" />
+            <local:EditableDataGridDark x:Name="AttributesGrid" ItemsSource="{Binding VertexShaderAttributes}"
+                                        AutoGenerateColumns="False" HeadersVisibility="Column" GridLinesVisibility="All" SelectionMode="Single">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="Name" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <local:UndertaleStringReference Margin="20,0,0,0" ObjectReference="{Binding Name, Mode=TwoWay}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </local:EditableDataGridDark>
+        </DockPanel>
+
+        <Border Grid.Row="9" Grid.Column="1" Margin="20" Background="LightPink" BorderBrush="Red" BorderThickness="3">
+            <TextBlock TextWrapping="Wrap" Margin="3" Foreground="Red" Text="WARNING: Editing shader data directly in the above fields is not recommended, as some of the data is compiled in binary form. Instead, use the shader import/export scripts to move shaders between existing games (including any of your own), or use the project system to do the same." />
+        </Border>
+    </Grid>
+</local:DataUserControl>
