@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="UndertaleModTool.AudioFileReference"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:UndertaleModTool"
+             mc:Ignorable="d"
+             d:DesignHeight="20" d:DesignWidth="300"
+             Name="audioReference">
+    <UserControl.Resources>
+        <local:ContextMenuDark x:Key="contextMenu">
+            <local:MenuItemDark Header="Open in new tab" Click="OpenInNewTabItem_Click" />
+        </local:ContextMenuDark>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <local:TextBoxDark Grid.Column="0" x:Name="AudioIdText" Text="{Binding AudioID}" />
+        <local:TextBoxDark Grid.Column="1" x:Name="ObjectText" IsReadOnly="True"
+                           ToolTip.Tip="This is an object reference. Drag and drop an object of matching type from the tree on the left to change it!"
+                           DoubleTapped="TextBox_MouseDoubleClick" PointerPressed="Details_MouseDown" />
+        <local:ButtonDark Grid.Column="2" x:Name="DetailsButton" Click="Details_Click" PointerPressed="Details_MouseDown"
+                          Content=" ... " ToolTip.Tip="Open referenced object" />
+        <local:ButtonDark Grid.Column="3" x:Name="RemoveButton" Click="Remove_Click" Content=" X " ToolTip.Tip="Remove reference" />
+    </Grid>
+</UserControl>
