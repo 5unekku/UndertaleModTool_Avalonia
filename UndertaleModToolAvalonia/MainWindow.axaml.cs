@@ -33,11 +33,6 @@ namespace UndertaleModTool
                 "Open a data.win file to get started, then click items on the left to view them."));
         }
 
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
-
         /// <summary>
         /// returns an avalonia bitmap for the given <see cref="GMImage"/>, reusing a cached instance when one is
         /// still alive. (1:1 with the wpf method of the same name, which returned a <c>BitmapSource</c>.)
