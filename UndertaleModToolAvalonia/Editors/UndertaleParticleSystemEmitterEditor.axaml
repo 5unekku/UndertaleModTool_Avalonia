@@ -1,0 +1,246 @@
+﻿<local:DataUserControl x:Class="UndertaleModTool.UndertaleParticleSystemEmitterEditor"
+                       xmlns="https://github.com/avaloniaui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                       xmlns:local="clr-namespace:UndertaleModTool"
+                       xmlns:undertale="clr-namespace:UndertaleModLib.Models;assembly=UndertaleModLib"
+                       mc:Ignorable="d"
+                       d:DesignHeight="4500" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <local:IsVersionAtLeastConverter x:Key="IsVersionAtLeastConverter" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Controls/TransparencyGridBrush.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid ColumnDefinitions="1*,3*">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Name" />
+        <local:UndertaleStringReference Grid.Row="0" Grid.Column="1" Margin="3" ObjectReference="{Binding Name}" />
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Enabled"
+                   IsVisible="{Binding Mode=OneTime, Converter={StaticResource IsVersionAtLeastConverter}, ConverterParameter=2023.6}" />
+        <CheckBox Grid.Row="1" Grid.Column="1" Margin="3" IsChecked="{Binding Enabled}"
+                  IsVisible="{Binding Mode=OneTime, Converter={StaticResource IsVersionAtLeastConverter}, ConverterParameter=2023.6}" />
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Emit mode" />
+        <local:ComboBoxDark Grid.Row="2" Grid.Column="1" Margin="3"
+                            ItemsSource="{local:EnumValues undertale:UndertaleParticleSystemEmitter+EmitMode}" SelectedItem="{Binding Mode}" />
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="Emit count" />
+        <local:TextBoxDark Grid.Row="3" Grid.Column="1" Margin="3" Text="{Binding EmitCount}" />
+
+        <Grid Grid.Row="4" Grid.ColumnSpan="2" ColumnDefinitions="1*,3*"
+              IsVisible="{Binding Mode=OneTime, Converter={StaticResource IsVersionAtLeastConverter}, ConverterParameter=2023.8}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Emit relative" />
+            <CheckBox Grid.Row="0" Grid.Column="1" Margin="3" IsChecked="{Binding EmitRelative}" />
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Delay min|max" />
+            <Grid Grid.Row="1" Grid.Column="1" ColumnDefinitions="*,*">
+                <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding DelayMin}" />
+                <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding DelayMax}" />
+            </Grid>
+            <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Delay measured in:" />
+            <local:ComboBoxDark Grid.Row="2" Grid.Column="1" Margin="3"
+                    ItemsSource="{local:EnumValues undertale:UndertaleParticleSystemEmitter+TimeUnitEnum}" SelectedItem="{Binding DelayUnit}" />
+            <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="Interval min|max" />
+            <Grid Grid.Row="3" Grid.Column="1" ColumnDefinitions="*,*">
+                <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding IntervalMin}" />
+                <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding IntervalMax}" />
+            </Grid>
+            <TextBlock Grid.Row="4" Grid.Column="0" Margin="3" Text="Interval measured in:" />
+            <local:ComboBoxDark Grid.Row="4" Grid.Column="1" Margin="3"
+                    ItemsSource="{local:EnumValues undertale:UndertaleParticleSystemEmitter+TimeUnitEnum}" SelectedItem="{Binding IntervalUnit}" />
+        </Grid>
+
+        <TextBlock Grid.Row="5" Grid.Column="0" Margin="3" Text="Distribution" />
+        <local:ComboBoxDark Grid.Row="5" Grid.Column="1" Margin="3"
+                            ItemsSource="{local:EnumValues undertale:UndertaleParticleSystemEmitter+DistributionEnum}" SelectedItem="{Binding Distribution}" />
+
+        <TextBlock Grid.Row="6" Grid.Column="0" Margin="3" Text="Shape" />
+        <local:ComboBoxDark Grid.Row="6" Grid.Column="1" Margin="3"
+                            ItemsSource="{local:EnumValues undertale:UndertaleParticleSystemEmitter+EmitterShape}" SelectedItem="{Binding Shape}" />
+
+        <TextBlock Grid.Row="7" Grid.Column="0" Margin="3" Text="Region X|Y|Width|Height" />
+        <Grid Grid.Row="7" Grid.Column="1" ColumnDefinitions="*,*,*,*">
+            <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding RegionX}" />
+            <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding RegionY}" />
+            <local:TextBoxDark Grid.Column="2" Margin="3" Text="{Binding RegionWidth}" />
+            <local:TextBoxDark Grid.Column="3" Margin="3" Text="{Binding RegionHeight}" />
+        </Grid>
+
+        <TextBlock Grid.Row="8" Grid.Column="0" Margin="3" Text="Rotation" />
+        <local:TextBoxDark Grid.Row="8" Grid.Column="1" Margin="3" Text="{Binding Rotation}" />
+
+        <TextBlock Grid.Row="9" Grid.Column="0" Margin="3" Text="Sprite" />
+        <local:UndertaleObjectReference Grid.Row="9" Grid.Column="1" Margin="3" ObjectReference="{Binding Sprite}" ObjectType="{x:Type undertale:UndertaleSprite}" />
+
+        <ListBox Grid.Row="10" Grid.Column="1" ItemsSource="{Binding Sprite.Textures, Mode=OneWay}" Background="Transparent" BorderThickness="0">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Viewbox Stretch="Uniform" StretchDirection="DownOnly">
+                        <Border Background="{DynamicResource TransparencyGridBrushBrush}">
+                            <local:UndertaleTexturePageItemDisplay DataContext="{Binding Texture, Mode=OneWay}" />
+                        </Border>
+                    </Viewbox>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <TextBlock Grid.Row="11" Grid.Column="0" Margin="3" Text="Sprite frame index" />
+        <local:TextBoxDark Grid.Row="11" Grid.Column="1" Margin="3" Text="{Binding FrameIndex}" />
+
+        <Grid Grid.Row="12" Grid.ColumnSpan="2" ColumnDefinitions="1*,3*"
+              IsVisible="{Binding Mode=OneTime, Converter={StaticResource IsVersionAtLeastConverter}, ConverterParameter=2023.4}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Animate sprite" />
+            <CheckBox Grid.Row="0" Grid.Column="1" Margin="3" IsChecked="{Binding Animate}" />
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Stretch sprite" />
+            <CheckBox Grid.Row="1" Grid.Column="1" Margin="3" IsChecked="{Binding Stretch}" />
+            <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Random" />
+            <CheckBox Grid.Row="2" Grid.Column="1" Margin="3" IsChecked="{Binding IsRandom}" />
+        </Grid>
+
+        <TextBlock Grid.Row="13" Grid.Column="0" Margin="3" Text="Texture" />
+        <local:ComboBoxDark Grid.Row="13" Grid.Column="1" Margin="3"
+                            ItemsSource="{local:EnumValues undertale:UndertaleParticleSystemEmitter+TextureEnum}" SelectedItem="{Binding Texture}" />
+
+        <TextBlock Grid.Row="14" Grid.Column="0" Margin="3" Text="Start color" />
+        <local:ColorPicker Grid.Row="14" Grid.Column="2" Margin="3" Color="{Binding StartColor}" />
+
+        <TextBlock Grid.Row="15" Grid.Column="0" Margin="3" Text="Middle color" />
+        <local:ColorPicker Grid.Row="15" Grid.Column="2" Margin="3" Color="{Binding MidColor}" />
+
+        <TextBlock Grid.Row="16" Grid.Column="0" Margin="3" Text="End color" />
+        <local:ColorPicker Grid.Row="16" Grid.Column="2" Margin="3" Color="{Binding EndColor}" />
+
+        <TextBlock Grid.Row="17" Grid.Column="0" Margin="3" Text="Additive color blend" />
+        <CheckBox Grid.Row="17" Grid.Column="1" Margin="3" IsChecked="{Binding AdditiveBlend}" />
+
+        <TextBlock Grid.Row="18" Grid.Column="0" Margin="3" Text="Lifetime min|max" />
+        <Grid Grid.Row="18" Grid.Column="1" ColumnDefinitions="*,*">
+            <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding LifetimeMin}" />
+            <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding LifetimeMax}" />
+        </Grid>
+
+        <TextBlock Grid.Row="19" Grid.Column="0" Margin="3" Text="Scale X|Y" />
+        <Grid Grid.Row="19" Grid.Column="1" ColumnDefinitions="*,*">
+            <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding ScaleX}" />
+            <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding ScaleY}" />
+        </Grid>
+
+        <TextBlock Grid.Row="20" Grid.Column="1" Margin="3" HorizontalAlignment="Center" Foreground="DarkGray" FontStyle="Italic" TextWrapping="Wrap">
+            Hint: Prior to GM 2023.8, these "Size" values were not split by x and y.<LineBreak />
+            UndertaleModTool represents this by averaging the values.<LineBreak />
+            For best results, enter the same value in both fields.
+        </TextBlock>
+
+        <TextBlock Grid.Row="21" Grid.Column="0" Margin="3" Text="Size min" />
+        <Grid Grid.Row="21" Grid.Column="1" ColumnDefinitions="*,*">
+            <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding SizeMinX}" />
+            <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding SizeMinY}" />
+        </Grid>
+
+        <TextBlock Grid.Row="22" Grid.Column="0" Margin="3" Text="Size max" />
+        <Grid Grid.Row="22" Grid.Column="1" ColumnDefinitions="*,*">
+            <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding SizeMaxX}" />
+            <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding SizeMaxY}" />
+        </Grid>
+
+        <TextBlock Grid.Row="23" Grid.Column="0" Margin="3" Text="Size increase" />
+        <Grid Grid.Row="23" Grid.Column="1" ColumnDefinitions="*,*">
+            <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding SizeIncreaseX}" />
+            <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding SizeIncreaseY}" />
+        </Grid>
+
+        <TextBlock Grid.Row="24" Grid.Column="0" Margin="3" Text="Size wiggle" />
+        <Grid Grid.Row="24" Grid.Column="1" ColumnDefinitions="*,*">
+            <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding SizeWiggleX}" />
+            <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding SizeWiggleY}" />
+        </Grid>
+
+        <TextBlock Grid.Row="25" Grid.Column="0" Margin="3" Text="Speed min|max" />
+        <Grid Grid.Row="25" Grid.Column="1" ColumnDefinitions="*,*">
+            <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding SpeedMin}" />
+            <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding SpeedMax}" />
+        </Grid>
+
+        <TextBlock Grid.Row="26" Grid.Column="0" Margin="3" Text="Speed increase|wiggle" />
+        <Grid Grid.Row="26" Grid.Column="1" ColumnDefinitions="*,*">
+            <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding SpeedIncrease}" />
+            <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding SpeedWiggle}" />
+        </Grid>
+
+        <TextBlock Grid.Row="27" Grid.Column="0" Margin="3" Text="Gravity force|direction" />
+        <Grid Grid.Row="27" Grid.Column="1" ColumnDefinitions="*,*">
+            <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding GravityForce}" />
+            <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding GravityDirection}" />
+        </Grid>
+
+        <TextBlock Grid.Row="28" Grid.Column="0" Margin="3" Text="Direction min|max" />
+        <Grid Grid.Row="28" Grid.Column="1" ColumnDefinitions="*,*">
+            <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding DirectionMin}" />
+            <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding DirectionMax}" />
+        </Grid>
+
+        <TextBlock Grid.Row="29" Grid.Column="0" Margin="3" Text="Direction increase|wiggle" />
+        <Grid Grid.Row="29" Grid.Column="1" ColumnDefinitions="*,*">
+            <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding DirectionIncrease}" />
+            <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding DirectionWiggle}" />
+        </Grid>
+
+        <TextBlock Grid.Row="30" Grid.Column="0" Margin="3" Text="Orientation min|max" />
+        <Grid Grid.Row="30" Grid.Column="1" ColumnDefinitions="*,*">
+            <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding OrientationMin}" />
+            <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding OrientationMax}" />
+        </Grid>
+
+        <TextBlock Grid.Row="31" Grid.Column="0" Margin="3" Text="Orientation increase|wiggle" />
+        <Grid Grid.Row="31" Grid.Column="1" ColumnDefinitions="*,*">
+            <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding OrientationIncrease}" />
+            <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding OrientationWiggle}" />
+        </Grid>
+
+        <TextBlock Grid.Row="32" Grid.Column="0" Margin="3" Text="Is orientation relative" />
+        <CheckBox Grid.Row="32" Grid.Column="1" Margin="3" IsChecked="{Binding OrientationRelative}" />
+
+        <TextBlock Grid.Row="33" Grid.Column="0" Margin="3" Text="Spawn on death" />
+        <local:UndertaleObjectReference Grid.Row="33" Grid.Column="1" Margin="3" ObjectReference="{Binding SpawnOnDeath}" ObjectType="{x:Type undertale:UndertaleParticleSystemEmitter}" />
+
+        <TextBlock Grid.Row="34" Grid.Column="0" Margin="3" Text="Spawn on death count" />
+        <local:TextBoxDark Grid.Row="34" Grid.Column="1" Margin="3" Text="{Binding SpawnOnDeathCount}" />
+
+        <TextBlock Grid.Row="35" Grid.Column="0" Margin="3" Text="Spawn on update" />
+        <local:UndertaleObjectReference Grid.Row="35" Grid.Column="1" Margin="3" ObjectReference="{Binding SpawnOnUpdate}" ObjectType="{x:Type undertale:UndertaleParticleSystemEmitter}" />
+
+        <TextBlock Grid.Row="36" Grid.Column="0" Margin="3" Text="Spawn on update count" />
+        <local:TextBoxDark Grid.Row="36" Grid.Column="1" Margin="3" Text="{Binding SpawnOnUpdateCount}" />
+    </Grid>
+</local:DataUserControl>
