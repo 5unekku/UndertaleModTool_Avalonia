@@ -36,6 +36,9 @@
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.13" />
         <PackageReference Include="Avalonia.Diagnostics" Version="11.3.13" Condition="'$(Configuration)' == 'Debug'" />
         <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.3.0" />
+        <!-- note: no PropertyChanged.Fody here. avalonia's AvaloniaObject already implements INotifyPropertyChanged,
+             so fody would try (and fail) to weave every control. gui change-notification is done manually instead;
+             the data models keep their notifications from UndertaleModLib's own fody weaving. -->
         <PackageReference Include="log4net" Version="3.3.2" />
         <PackageReference Include="NAudio" Version="2.3.0" />
         <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
