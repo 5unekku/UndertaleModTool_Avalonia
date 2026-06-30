@@ -1,0 +1,176 @@
+﻿<local:DataUserControl x:Class="UndertaleModTool.UndertaleSpriteEditor"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:UndertaleModTool"
+             xmlns:undertale="clr-namespace:UndertaleModLib.Models;assembly=UndertaleModLib"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <local:BooleanToVisibilityConverter x:Key="BoolToVis" />
+            <local:MaskImageConverter x:Key="MaskImageConverter" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Controls/TransparencyGridBrush.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid ColumnDefinitions="1*,3*">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Name" />
+        <local:UndertaleStringReference Grid.Row="0" Grid.Column="1" Margin="3" ObjectReference="{Binding Name}" />
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Size" />
+        <Grid Grid.Row="2" Grid.Column="1" ColumnDefinitions="1*,3*,1*,3*">
+            <TextBlock Grid.Column="0" Margin="3" Text="Width:" />
+            <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding Width}" />
+            <TextBlock Grid.Column="2" Margin="3" Text="Height:" />
+            <local:TextBoxDark Grid.Column="3" Margin="3" Text="{Binding Height}" />
+        </Grid>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="Margin" />
+        <Grid Grid.Row="3" Grid.Column="1" ColumnDefinitions="*,*,*,*,*,*,*,*">
+            <TextBlock Grid.Column="0" Margin="3" Text="Left:" />
+            <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding MarginLeft}" />
+            <TextBlock Grid.Column="2" Margin="3" Text="Right:" />
+            <local:TextBoxDark Grid.Column="3" Margin="3" Text="{Binding MarginRight}" />
+            <TextBlock Grid.Column="4" Margin="3" Text="Bottom:" />
+            <local:TextBoxDark Grid.Column="5" Margin="3" Text="{Binding MarginBottom}" />
+            <TextBlock Grid.Column="6" Margin="3" Text="Top:" />
+            <local:TextBoxDark Grid.Column="7" Margin="3" Text="{Binding MarginTop}" />
+        </Grid>
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Margin="3" Text="Transparent" />
+        <CheckBox Grid.Row="4" Grid.Column="1" Margin="3" IsChecked="{Binding Transparent}" />
+
+        <TextBlock Grid.Row="5" Grid.Column="0" Margin="3" Text="Smooth" />
+        <CheckBox Grid.Row="5" Grid.Column="1" Margin="3" IsChecked="{Binding Smooth}" />
+
+        <TextBlock Grid.Row="6" Grid.Column="0" Margin="3" Text="Preload" />
+        <CheckBox Grid.Row="6" Grid.Column="1" Margin="3" IsChecked="{Binding Preload}" />
+
+        <TextBlock Grid.Row="7" Grid.Column="0" Margin="3" Text="Bounding box mode" />
+        <local:TextBoxDark Grid.Row="7" Grid.Column="1" Margin="3" Text="{Binding BBoxMode}" />
+
+        <TextBlock Grid.Row="8" Grid.Column="0" Margin="3" Text="SepMasks" />
+        <local:ComboBoxDark Grid.Row="8" Grid.Column="1" Margin="3" ItemsSource="{local:EnumValues undertale:UndertaleSprite+SepMaskType}" SelectedItem="{Binding SepMasks}" />
+
+        <TextBlock Grid.Row="9" Grid.Column="0" Margin="3" Text="Origin" />
+        <Grid Grid.Row="9" Grid.Column="1" ColumnDefinitions="1*,3*,1*,3*">
+            <TextBlock Grid.Column="0" Margin="3" Text="X:" />
+            <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding OriginXWrapper}" />
+            <TextBlock Grid.Column="2" Margin="3" Text="Y:" />
+            <local:TextBoxDark Grid.Column="3" Margin="3" Text="{Binding OriginYWrapper}" />
+        </Grid>
+
+        <TextBlock Grid.Row="10" Grid.Column="0" Margin="3" Text="Textures" />
+        <DockPanel Grid.Row="10" Grid.Column="1" Margin="3">
+            <local:ButtonDark DockPanel.Dock="Bottom" HorizontalAlignment="Left" Margin="0,3,0,0" Content="Add" Click="AddTexture_Click" />
+            <local:EditableDataGridDark ItemsSource="{Binding Textures, Mode=OneWay}" x:Name="TextureList"
+                                        AutoGenerateColumns="False" HeadersVisibility="None" GridLinesVisibility="All" SelectionMode="Single">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <local:UndertaleObjectReference Margin="20,0,0,0" CanRemove="True" Loaded="UndertaleObjectReference_Loaded"
+                                                                ObjectReference="{Binding Texture, Mode=TwoWay}"
+                                                                ObjectReferenceChanged="UndertaleObjectReference_ObjectReferenceChanged"
+                                                                ObjectType="{x:Type undertale:UndertaleTexturePageItem}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </local:EditableDataGridDark>
+        </DockPanel>
+
+        <Viewbox Grid.Row="11" Grid.Column="1" Stretch="Uniform" StretchDirection="DownOnly">
+            <Border Background="{StaticResource TransparencyGridBrushBrush}">
+                <local:UndertaleTexturePageItemDisplay DataContext="{Binding SelectedItem.Texture, Mode=OneWay, ElementName=TextureList}" x:Name="TextureDisplay" />
+            </Border>
+        </Viewbox>
+
+        <local:ButtonDark Grid.Row="12" Grid.Column="1" Content="Export all frames (or Spine data if this is a Spine sprite)" Click="ExportAll_Click" />
+
+        <TextBlock Grid.Row="13" Grid.Column="0" Margin="3" Text="Collision masks" />
+        <DockPanel Grid.Row="13" Grid.Column="1" Margin="3">
+            <local:ButtonDark DockPanel.Dock="Bottom" HorizontalAlignment="Left" Margin="0,3,0,0" Content="Add" Click="AddMask_Click" />
+            <local:EditableDataGridDark ItemsSource="{Binding CollisionMasks, Mode=OneWay}" x:Name="MaskList"
+                                        AutoGenerateColumns="False" HeadersVisibility="None" GridLinesVisibility="All"
+                                        SelectionMode="Single" SelectionChanged="MaskList_SelectionChanged">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid Margin="20,0,0,0" ColumnDefinitions="*,Auto">
+                                    <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="(CollisionMask)" />
+                                    <local:ButtonDark Grid.Column="1" Content=" X " Click="RemoveMask_Clicked" ToolTip.Tip="Remove" />
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </local:EditableDataGridDark>
+        </DockPanel>
+
+        <StackPanel Grid.Row="14" Grid.Column="1" Margin="3" Name="MaskEditor"
+                    DataContext="{Binding SelectedItem, Mode=OneWay, ElementName=MaskList}">
+            <Viewbox Stretch="None">
+                <Border BorderThickness="2" BorderBrush="Gray" Name="MaskBorder">
+                    <Image Stretch="None" Name="MaskImage" RenderOptions.BitmapInterpolationMode="None">
+                        <Image.Source>
+                            <MultiBinding Converter="{StaticResource MaskImageConverter}">
+                                <Binding Path="Width" Mode="OneWay" />
+                                <Binding Path="Height" Mode="OneWay" />
+                                <Binding Path="Data" Mode="OneWay" />
+                            </MultiBinding>
+                        </Image.Source>
+                    </Image>
+                </Border>
+            </Viewbox>
+            <TextBlock Text="Invalid mask data!" Foreground="Red" Name="MaskIsInvalid" IsVisible="False" />
+
+            <Grid ColumnDefinitions="*,*,*">
+                <local:ButtonDark Grid.Column="0" Content="Import mask" Click="MaskImport_Click" x:Name="MaskImport" />
+                <local:ButtonDark Grid.Column="2" Content="Export mask" Click="MaskExport_Click" x:Name="MaskExport" />
+            </Grid>
+        </StackPanel>
+
+        <TextBlock Grid.Row="15" Grid.Column="0" Margin="3" Text="Is special type?" />
+        <CheckBox Grid.Row="15" Grid.Column="1" Margin="3" IsChecked="{Binding IsSpecialType}" />
+
+        <Grid Grid.Row="16" Grid.ColumnSpan="2" Margin="0" ColumnDefinitions="1*,3*"
+              IsVisible="{Binding IsSpecialType, Mode=OneWay, Converter={StaticResource BoolToVis}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Version" />
+            <local:TextBoxDark Grid.Row="0" Grid.Column="1" Margin="3" Text="{Binding SVersion}" />
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Type" />
+            <local:ComboBoxDark Grid.Row="1" Grid.Column="1" Margin="3" ItemsSource="{local:EnumValues undertale:UndertaleSprite+SpriteType}" SelectedItem="{Binding SSpriteType}" />
+
+            <Grid Grid.Row="2" Grid.ColumnSpan="2" Margin="0" ColumnDefinitions="1*,3*"
+                  IsVisible="{Binding DataContext.IsGMS2, Mode=OneTime, RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Playback speed" />
+                <local:TextBoxDark Grid.Row="0" Grid.Column="1" Margin="3" Text="{Binding GMS2PlaybackSpeed}" />
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Playback speed type" />
+                <local:ComboBoxDark Grid.Row="1" Grid.Column="1" Margin="3" ItemsSource="{local:EnumValues undertale:AnimSpeedType}" SelectedItem="{Binding GMS2PlaybackSpeedType}" />
+            </Grid>
+        </Grid>
+    </Grid>
+</local:DataUserControl>
