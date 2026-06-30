@@ -52,6 +52,9 @@
                 <Separator />
                 <MenuItem Header="Exit" Click="Exit_Click" />
             </MenuItem>
+            <MenuItem Header="Scripts">
+                <MenuItem Header="Run script..." Click="RunScriptMenu_Click" />
+            </MenuItem>
         </Menu>
 
         <TextBlock DockPanel.Dock="Bottom" x:Name="StatusBar" Margin="4,2" Text="No data file loaded." />
