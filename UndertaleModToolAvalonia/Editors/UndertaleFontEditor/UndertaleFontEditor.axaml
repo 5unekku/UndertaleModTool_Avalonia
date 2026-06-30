@@ -1,0 +1,201 @@
+﻿<local:DataUserControl x:Class="UndertaleModTool.UndertaleFontEditor"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:UndertaleModTool"
+             xmlns:undertale="clr-namespace:UndertaleModLib.Models;assembly=UndertaleModLib"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid ColumnDefinitions="1*,3*">
+        <Grid.Resources>
+            <local:CharConverter x:Key="CharConverter" />
+            <local:IsVersionAtLeastConverter x:Key="IsVersionAtLeastConverter" />
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Name" />
+        <local:UndertaleStringReference Grid.Row="0" Grid.Column="1" Margin="3" ObjectReference="{Binding Name}" />
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Display name" />
+        <local:UndertaleStringReference Grid.Row="1" Grid.Column="1" Margin="3" ObjectReference="{Binding DisplayName}" />
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Font size" />
+        <Grid Grid.Row="2" Grid.Column="1" Margin="3" ColumnDefinitions="*,Auto">
+            <local:TextBoxDark Grid.Column="0" Text="{Binding EmSize}" />
+            <TextBlock Grid.Column="1" Text=" em" />
+        </Grid>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="Bold" />
+        <CheckBox Grid.Row="3" Grid.Column="1" Margin="3" IsChecked="{Binding Bold}" />
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Margin="3" Text="Italic" />
+        <CheckBox Grid.Row="4" Grid.Column="1" Margin="3" IsChecked="{Binding Italic}" />
+
+        <TextBlock Grid.Row="5" Grid.Column="0" Margin="3" Text="Range" />
+        <Grid Grid.Row="5" Grid.Column="1" ColumnDefinitions="*,Auto,*">
+            <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding RangeStart}" />
+            <TextBlock Grid.Column="1" Margin="3" Text=" - " />
+            <local:TextBoxDark Grid.Column="2" Margin="3" Text="{Binding RangeEnd}" />
+        </Grid>
+
+        <TextBlock Grid.Row="6" Grid.Column="0" Margin="3" Text="Charset" />
+        <local:TextBoxDark Grid.Row="6" Grid.Column="1" Margin="3" Text="{Binding Charset}" />
+
+        <TextBlock Grid.Row="7" Grid.Column="0" Margin="3" Text="Anti Aliasing" />
+        <local:TextBoxDark Grid.Row="7" Grid.Column="1" Margin="3" Text="{Binding AntiAliasing}" />
+
+        <TextBlock Grid.Row="8" Grid.Column="0" Margin="3" Text="Texture" />
+        <local:UndertaleObjectReference Grid.Row="8" Grid.Column="1" Margin="3" ObjectReference="{Binding Texture}" ObjectType="{x:Type undertale:UndertaleTexturePageItem}" />
+
+        <TextBlock Grid.Row="9" Grid.Column="0" Margin="3" Text="Scale" />
+        <Grid Grid.Row="9" Grid.Column="1" ColumnDefinitions="*,*">
+            <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding ScaleX}" />
+            <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding ScaleY}" />
+        </Grid>
+
+        <TextBlock Grid.Row="10" Grid.Column="0" Margin="3" Text="Ascender"
+                   IsVisible="{Binding Mode=OneTime, Converter={StaticResource IsVersionAtLeastConverter}, ConverterParameter=2022.2}" />
+        <local:TextBoxDark Grid.Row="10" Grid.Column="1" Margin="3" Text="{Binding Ascender}"
+                           IsVisible="{Binding Mode=OneTime, Converter={StaticResource IsVersionAtLeastConverter}, ConverterParameter=2022.2}" />
+
+        <TextBlock Grid.Row="11" Grid.Column="0" Margin="3" Text="Ascender offset"
+                   IsVisible="{Binding Mode=OneTime, Converter={StaticResource IsVersionAtLeastConverter}, ConverterParameter=2022.2}" />
+        <local:TextBoxDark Grid.Row="11" Grid.Column="1" Margin="3" Text="{Binding AscenderOffset}"
+                           IsVisible="{Binding Mode=OneTime, Converter={StaticResource IsVersionAtLeastConverter}, ConverterParameter=2022.2}" />
+
+        <TextBlock Grid.Row="12" Grid.Column="0" Margin="3" Text="SDF spread value"
+                   IsVisible="{Binding Mode=OneTime, Converter={StaticResource IsVersionAtLeastConverter}, ConverterParameter=2023.2}" />
+        <local:TextBoxDark Grid.Row="12" Grid.Column="1" Margin="3" Text="{Binding SDFSpread}"
+                           IsVisible="{Binding Mode=OneTime, Converter={StaticResource IsVersionAtLeastConverter}, ConverterParameter=2023.2}" />
+
+        <TextBlock Grid.Row="13" Grid.Column="0" Margin="3" Text="Line height"
+                   IsVisible="{Binding Mode=OneTime, Converter={StaticResource IsVersionAtLeastConverter}, ConverterParameter=2023.6}" />
+        <local:TextBoxDark Grid.Row="13" Grid.Column="1" Margin="3" Text="{Binding LineHeight}"
+                           IsVisible="{Binding Mode=OneTime, Converter={StaticResource IsVersionAtLeastConverter}, ConverterParameter=2023.6}" />
+
+        <TextBlock Grid.Row="14" Grid.ColumnSpan="2" Margin="3,30,3,3" HorizontalAlignment="Center" Foreground="DarkGray" FontStyle="Italic" TextWrapping="Wrap" TextAlignment="Center"
+                   Text="Hint: You can click on any glyph here to highlight it in the &quot;Glyphs&quot;." />
+        <Viewbox Grid.Row="15" Grid.ColumnSpan="2" Margin="3" Stretch="Uniform" StretchDirection="DownOnly">
+            <Grid PointerPressed="Grid_MouseDown" Cursor="Hand" Background="Black">
+                <local:UndertaleTexturePageItemDisplay DataContext="{Binding Texture, Mode=OneWay}" />
+                <Canvas Name="GlyphsOverlayCanvas" DataContext="{Binding SelectedItem, ElementName=GlyphsGrid, Mode=OneWay}">
+                    <Rectangle Name="GlyphRectangle" Stroke="#FFB23131" StrokeThickness="1"
+                               Canvas.Left="{Binding SourceX, Mode=OneWay, FallbackValue=-1}"
+                               Canvas.Top="{Binding SourceY, Mode=OneWay, FallbackValue=-1}"
+                               Width="{Binding SourceWidth, Mode=OneWay, FallbackValue=0}"
+                               Height="{Binding SourceHeight, Mode=OneWay, FallbackValue=0}">
+                        <Rectangle.Fill>
+                            <SolidColorBrush Color="Red" Opacity="0.2" />
+                        </Rectangle.Fill>
+                    </Rectangle>
+                </Canvas>
+            </Grid>
+        </Viewbox>
+
+        <StackPanel Grid.Row="16" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <local:ButtonDark x:Name="EditRectangleButton" Margin="3" Width="220" Click="EditRectangleButton_Click" Content="Edit a selected glyph rectangle" />
+            <local:ButtonDark Margin="3" Width="200" Content="Create an empty glyph" Click="CreateGlyphButton_Click" />
+        </StackPanel>
+
+        <TextBlock Name="GlyphsLabel" Grid.Row="17" Grid.ColumnSpan="2" Margin="3" HorizontalAlignment="Left" Text="Glyphs:" />
+        <Grid Grid.Row="18" Grid.ColumnSpan="2" MaxHeight="370" Margin="3">
+            <local:EditableDataGridDark x:Name="GlyphsGrid" ItemsSource="{Binding Glyphs, Mode=OneWay}"
+                                        AutoGenerateColumns="False" HeadersVisibility="Column" GridLinesVisibility="All" SelectionMode="Single">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="Char" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <local:TextBoxDark Text="{Binding Character, Mode=TwoWay, Converter={StaticResource CharConverter}}" Margin="20,0,0,0" MaxLength="1" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Source position/size" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,*,*,*">
+                                    <local:TextBoxDark Grid.Column="0" Text="{Binding SourceX, Mode=TwoWay}" />
+                                    <local:TextBoxDark Grid.Column="1" Text="{Binding SourceY, Mode=TwoWay}" />
+                                    <local:TextBoxDark Grid.Column="2" Text="{Binding SourceWidth, Mode=TwoWay}" />
+                                    <local:TextBoxDark Grid.Column="3" Text="{Binding SourceHeight, Mode=TwoWay}" />
+                                </Grid>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Shift" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <local:TextBoxDark Text="{Binding Shift, Mode=TwoWay}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Offset" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <local:TextBoxDark Text="{Binding Offset, Mode=TwoWay}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Kerning" Width="60">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <local:ButtonDark Margin="0,-1" Click="EditKerningButton_Click" Content="Edit" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </local:EditableDataGridDark>
+
+            <Border Name="GlyphKerningBorder" BorderBrush="#FFABADB3" BorderThickness="1" IsVisible="False">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="2">
+                        <local:ButtonDark Click="KerningBackButton_Click" Width="40" Height="19" Content="&lt;-" />
+                        <TextBlock Text="Go back" Margin="3,-1,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+
+                    <local:EditableDataGridDark x:Name="GlyphKerningGrid"
+                                                AutoGenerateColumns="False" HeadersVisibility="Column" GridLinesVisibility="All" SelectionMode="Single">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Preceeding char" Width="Auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <local:TextBoxDark Text="{Binding Character, Mode=TwoWay, Converter={StaticResource CharConverter}}" MaxLength="1" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Add. shift" Width="Auto">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <local:TextBoxDark Text="{Binding ShiftModifier, Mode=TwoWay}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </local:EditableDataGridDark>
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <TextBlock Grid.Row="19" Grid.ColumnSpan="2" Margin="3" TextWrapping="Wrap" HorizontalAlignment="Center" TextAlignment="Center">
+            Note that the glyphs need to be specified in ascending order.<LineBreak />
+            Press the button below to sort them appropriately.
+        </TextBlock>
+        <local:ButtonDark Grid.Row="20" Grid.ColumnSpan="2" Margin="3" Click="Button_Sort_Click" Content="Sort glyphs" Width="200" FontSize="14" />
+
+        <TextBlock Grid.Row="21" Grid.ColumnSpan="2" Margin="3,6,3,3" TextWrapping="Wrap" HorizontalAlignment="Center" TextAlignment="Center">
+            Also, if you have added new characters or changed the character<LineBreak />
+            of an existing glyph, you should update the font range.<LineBreak />
+            Press the button below to do that.
+        </TextBlock>
+        <local:ButtonDark Grid.Row="22" Grid.ColumnSpan="2" Margin="3" Click="Button_UpdateRange_Click" Content="Update range" Width="200" FontSize="14" />
+    </Grid>
+</local:DataUserControl>
