@@ -114,53 +114,101 @@ namespace UndertaleModTool
         public double Height { get; set; }
         public double Opacity { get; set; } = 1.0;
 
-        /// <summary>builds the positioned-sprite drawables for a room (GMS2 instance layers, else GMS1 GameObjects).</summary>
+        /// <summary>
+        /// builds the room's drawables back-to-front: GMS2 tile/instance layers (or GMS1 tiles then game objects).
+        /// tile layers are composited via <see cref="CachedTileDataLoader"/>; backgrounds/effect layers are skipped.
+        /// </summary>
         public static List<RoomDrawable> BuildFor(UndertaleRoom room)
         {
             var drawables = new List<RoomDrawable>();
             if (room is null)
                 return drawables;
 
-            IEnumerable<UndertaleRoom.GameObject> instances;
             if (room.Layers is { Count: > 0 })
             {
-                var list = new List<UndertaleRoom.GameObject>();
-                foreach (UndertaleRoom.Layer layer in room.Layers)
-                    if (layer.InstancesData?.Instances is not null)
-                        list.AddRange(layer.InstancesData.Instances);
-                instances = list;
+                // the Layers list is front-first; render in reverse so back layers draw first
+                for (int i = room.Layers.Count - 1; i >= 0; i--)
+                {
+                    UndertaleRoom.Layer layer = room.Layers[i];
+                    switch (layer.LayerType)
+                    {
+                        case UndertaleRoom.LayerType.Tiles:
+                            AddTileLayer(drawables, layer);
+                            break;
+                        case UndertaleRoom.LayerType.Instances:
+                            if (layer.InstancesData?.Instances is not null)
+                                foreach (UndertaleRoom.GameObject instance in layer.InstancesData.Instances)
+                                    AddInstance(drawables, instance);
+                            break;
+                    }
+                }
             }
             else
             {
-                instances = room.GameObjects;
-            }
-
-            foreach (UndertaleRoom.GameObject instance in instances)
-            {
-                UndertaleSprite sprite = instance.ObjectDefinition?.Sprite;
-                if (sprite is null || sprite.Textures.Count == 0)
-                    continue;
-                UndertaleTexturePageItem texture = sprite.Textures[0]?.Texture;
-                if (texture is null)
-                    continue;
-
-                if (imageLoader.Convert(texture, typeof(Bitmap), null, CultureInfo.InvariantCulture) is not Bitmap bitmap)
-                    continue;
-
-                double scaleX = instance.ScaleX == 0 ? 1 : instance.ScaleX;
-                double scaleY = instance.ScaleY == 0 ? 1 : instance.ScaleY;
-                drawables.Add(new RoomDrawable
-                {
-                    Image = bitmap,
-                    Width = texture.SourceWidth * scaleX,
-                    Height = texture.SourceHeight * scaleY,
-                    X = instance.X - sprite.OriginX * scaleX,
-                    Y = instance.Y - sprite.OriginY * scaleY,
-                    Opacity = (instance.Color >> 24) / 255.0
-                });
+                foreach (UndertaleRoom.Tile tile in room.Tiles)
+                    AddTile(drawables, tile);
+                foreach (UndertaleRoom.GameObject instance in room.GameObjects)
+                    AddInstance(drawables, instance);
             }
 
             return drawables;
+        }
+
+        private static void AddInstance(List<RoomDrawable> drawables, UndertaleRoom.GameObject instance)
+        {
+            UndertaleSprite sprite = instance.ObjectDefinition?.Sprite;
+            if (sprite is null || sprite.Textures.Count == 0)
+                return;
+            UndertaleTexturePageItem texture = sprite.Textures[0]?.Texture;
+            if (texture is null)
+                return;
+            if (imageLoader.Convert(texture, typeof(Bitmap), null, CultureInfo.InvariantCulture) is not Bitmap bitmap)
+                return;
+
+            double scaleX = instance.ScaleX == 0 ? 1 : instance.ScaleX;
+            double scaleY = instance.ScaleY == 0 ? 1 : instance.ScaleY;
+            drawables.Add(new RoomDrawable
+            {
+                Image = bitmap,
+                Width = texture.SourceWidth * scaleX,
+                Height = texture.SourceHeight * scaleY,
+                X = instance.X - sprite.OriginX * scaleX,
+                Y = instance.Y - sprite.OriginY * scaleY,
+                Opacity = (instance.Color >> 24) / 255.0
+            });
+        }
+
+        private static void AddTile(List<RoomDrawable> drawables, UndertaleRoom.Tile tile)
+        {
+            if (imageLoader.Convert(tile, typeof(Bitmap), "tile", CultureInfo.InvariantCulture) is not Bitmap bitmap)
+                return;
+            drawables.Add(new RoomDrawable
+            {
+                Image = bitmap,
+                Width = tile.Width * tile.ScaleX,
+                Height = tile.Height * tile.ScaleY,
+                X = tile.X,
+                Y = tile.Y,
+                Opacity = (tile.Color >> 24) / 255.0
+            });
+        }
+
+        private static void AddTileLayer(List<RoomDrawable> drawables, UndertaleRoom.Layer layer)
+        {
+            if (layer.TilesData is null)
+                return;
+            Bitmap bitmap = CachedTileDataLoader.BuildLayerBitmap(layer.TilesData);
+            if (bitmap is null)
+                return;
+            drawables.Add(new RoomDrawable
+            {
+                Image = bitmap,
+                Width = bitmap.Size.Width,
+                Height = bitmap.Size.Height,
+                X = layer.XOffset,
+                Y = layer.YOffset,
+                Opacity = 1.0
+            });
         }
     }
 }
