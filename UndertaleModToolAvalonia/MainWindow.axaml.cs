@@ -62,6 +62,14 @@ namespace UndertaleModTool
             }
         }
 
+        /// <summary>opens a code entry (by name) in the editor host. line/tab targeting is not yet implemented.</summary>
+        public void OpenCodeEntry(string codeName, int lineNumber = -1, UndertaleCodeEditor.CodeEditorTab tab = UndertaleCodeEditor.CodeEditorTab.Unknown, bool inNewTab = false)
+        {
+            var code = Data?.Code?.ByName(codeName);
+            if (code is not null)
+                ChangeSelection(code, inNewTab);
+        }
+
         private void EditorTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // note: this can fire during InitializeComponent before the EditorTabs field is assigned, so use sender
@@ -178,6 +186,11 @@ namespace UndertaleModTool
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
             new SettingsWindow().ShowDialogSync(this);
+        }
+
+        private void SearchInCode_Click(object sender, RoutedEventArgs e)
+        {
+            new Windows.SearchInCodeWindow().Show(this);
         }
 
         private void ResourceTree_SelectionChanged(object sender, SelectionChangedEventArgs e)

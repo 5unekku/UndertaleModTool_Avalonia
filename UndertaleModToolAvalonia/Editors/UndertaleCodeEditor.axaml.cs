@@ -17,6 +17,14 @@ namespace UndertaleModTool
     // gettext annotations, zoom) are follow-ups; see avalonia-port memory.
     public partial class UndertaleCodeEditor : DataUserControl
     {
+        /// <summary>which tab of the code editor to show (decompiled gml or raw disassembly).</summary>
+        public enum CodeEditorTab
+        {
+            Unknown,
+            Decompiled,
+            Disassembly
+        }
+
         private static MainWindow mainWindow => MainWindow.Instance;
         private static IHighlightingDefinition gmlHighlighting;
 

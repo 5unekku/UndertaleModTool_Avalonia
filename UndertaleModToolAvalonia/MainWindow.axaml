@@ -57,6 +57,7 @@
             </MenuItem>
             <MenuItem Header="Edit">
                 <MenuItem Header="Settings..." Click="Settings_Click" />
+                <MenuItem Header="Search in code..." Click="SearchInCode_Click" />
             </MenuItem>
         </Menu>
 
