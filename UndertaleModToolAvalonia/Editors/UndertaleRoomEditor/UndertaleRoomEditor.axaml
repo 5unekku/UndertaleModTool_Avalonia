@@ -6,58 +6,122 @@
              xmlns:local="clr-namespace:UndertaleModTool"
              xmlns:undertale="clr-namespace:UndertaleModLib.Models;assembly=UndertaleModLib"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
-    <ScrollViewer>
-        <StackPanel>
-            <Border Margin="10" Background="LightGoldenrodYellow" BorderBrush="Goldenrod" BorderThickness="2" Padding="6">
-                <TextBlock TextWrapping="Wrap" Foreground="#665500"
-                           Text="Note: this is the basic room property view. The full interactive room editor (layer/instance/tile editing and the room renderer) is the largest remaining piece of the Avalonia port and is not yet available here." />
-            </Border>
-
-            <Grid ColumnDefinitions="1*,3*">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Name" />
-                <local:UndertaleStringReference Grid.Row="0" Grid.Column="1" Margin="3" ObjectReference="{Binding Name}" />
-
-                <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Caption" />
-                <local:UndertaleStringReference Grid.Row="1" Grid.Column="1" Margin="3" ObjectReference="{Binding Caption}" />
-
-                <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Size" />
-                <Grid Grid.Row="2" Grid.Column="1" ColumnDefinitions="*,*">
-                    <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding Width}" />
-                    <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding Height}" />
+             d:DesignHeight="600" d:DesignWidth="1000">
+    <Grid ColumnDefinitions="360,4,*">
+        <!-- left: properties, tree, and the selected-element panel -->
+        <ScrollViewer Grid.Column="0">
+            <StackPanel Margin="4">
+                <TextBlock Text="Room" FontWeight="Bold" Margin="3" />
+                <Grid ColumnDefinitions="1*,2*">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Name" />
+                    <local:UndertaleStringReference Grid.Row="0" Grid.Column="1" Margin="3" ObjectReference="{Binding Name}" />
+                    <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Caption" />
+                    <local:UndertaleStringReference Grid.Row="1" Grid.Column="1" Margin="3" ObjectReference="{Binding Caption}" />
+                    <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Width" />
+                    <local:TextBoxDark Grid.Row="2" Grid.Column="1" Margin="3" Text="{Binding Width}" />
+                    <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="Height" />
+                    <local:TextBoxDark Grid.Row="3" Grid.Column="1" Margin="3" Text="{Binding Height}" />
+                    <TextBlock Grid.Row="4" Grid.Column="0" Margin="3" Text="Speed" />
+                    <local:TextBoxDark Grid.Row="4" Grid.Column="1" Margin="3" Text="{Binding Speed}" />
+                    <TextBlock Grid.Row="5" Grid.Column="0" Margin="3" Text="Persistent" />
+                    <CheckBox Grid.Row="5" Grid.Column="1" Margin="3" IsChecked="{Binding Persistent}" />
+                    <TextBlock Grid.Row="6" Grid.Column="0" Margin="3" Text="Background color" />
+                    <local:ColorPicker HasAlpha="False" Grid.Row="6" Grid.Column="1" Margin="3" Color="{Binding BackgroundColor}" />
                 </Grid>
 
-                <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="Speed" />
-                <local:TextBoxDark Grid.Row="3" Grid.Column="1" Margin="3" Text="{Binding Speed}" />
+                <TextBlock Text="Contents" FontWeight="Bold" Margin="3,10,3,3" />
+                <TreeView x:Name="RoomObjectsTree" MaxHeight="280" SelectionChanged="RoomObjectsTree_SelectionChanged">
+                    <TreeView.DataTemplates>
+                        <TreeDataTemplate DataType="local:RoomTreeGroup" ItemsSource="{Binding Items}">
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                        </TreeDataTemplate>
+                    </TreeView.DataTemplates>
+                </TreeView>
 
-                <TextBlock Grid.Row="4" Grid.Column="0" Margin="3" Text="Persistent" />
-                <CheckBox Grid.Row="4" Grid.Column="1" Margin="3" IsChecked="{Binding Persistent}" />
+                <TextBlock Text="Selected element" FontWeight="Bold" Margin="3,10,3,3" />
+                <ContentControl x:Name="SelectedPanel" Margin="3">
+                    <ContentControl.DataTemplates>
+                        <DataTemplate DataType="undertale:UndertaleRoom+GameObject">
+                            <Grid ColumnDefinitions="1*,2*">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Object" />
+                                <local:UndertaleObjectReference Grid.Row="0" Grid.Column="1" Margin="3" ObjectReference="{Binding ObjectDefinition}" ObjectType="{x:Type undertale:UndertaleGameObject}" />
+                                <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="X" />
+                                <local:TextBoxDark Grid.Row="1" Grid.Column="1" Margin="3" Text="{Binding X}" />
+                                <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Y" />
+                                <local:TextBoxDark Grid.Row="2" Grid.Column="1" Margin="3" Text="{Binding Y}" />
+                                <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="Scale X / Y" />
+                                <Grid Grid.Row="3" Grid.Column="1" ColumnDefinitions="*,*">
+                                    <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding ScaleX}" />
+                                    <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding ScaleY}" />
+                                </Grid>
+                                <TextBlock Grid.Row="4" Grid.Column="0" Margin="3" Text="Color" />
+                                <local:ColorPicker Grid.Row="4" Grid.Column="1" Margin="3" Color="{Binding Color}" />
+                                <TextBlock Grid.Row="5" Grid.Column="0" Margin="3" Text="Rotation" />
+                                <local:TextBoxDark Grid.Row="5" Grid.Column="1" Margin="3" Text="{Binding Rotation}" />
+                            </Grid>
+                        </DataTemplate>
+                        <DataTemplate DataType="undertale:UndertaleRoom+Layer">
+                            <Grid ColumnDefinitions="1*,2*">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" /><RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" /><RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Name" />
+                                <local:UndertaleStringReference Grid.Row="0" Grid.Column="1" Margin="3" ObjectReference="{Binding LayerName}" />
+                                <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Type" />
+                                <local:TextBoxDark Grid.Row="1" Grid.Column="1" Margin="3" IsReadOnly="True" Text="{Binding LayerType}" />
+                                <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Depth" />
+                                <local:TextBoxDark Grid.Row="2" Grid.Column="1" Margin="3" Text="{Binding LayerDepth}" />
+                                <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="X offset" />
+                                <local:TextBoxDark Grid.Row="3" Grid.Column="1" Margin="3" Text="{Binding XOffset}" />
+                                <TextBlock Grid.Row="4" Grid.Column="0" Margin="3" Text="Y offset" />
+                                <local:TextBoxDark Grid.Row="4" Grid.Column="1" Margin="3" Text="{Binding YOffset}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ContentControl.DataTemplates>
+                </ContentControl>
+            </StackPanel>
+        </ScrollViewer>
 
-                <TextBlock Grid.Row="5" Grid.Column="0" Margin="3" Text="Background color" />
-                <local:ColorPicker HasAlpha="False" Grid.Row="5" Grid.Column="1" Margin="3" Color="{Binding BackgroundColor}" />
+        <GridSplitter Grid.Column="1" ResizeDirection="Columns" />
 
-                <TextBlock Grid.Row="6" Grid.Column="0" Margin="3" Text="Draw background color" />
-                <CheckBox Grid.Row="6" Grid.Column="1" Margin="3" IsChecked="{Binding DrawBackgroundColor}" />
-
-                <TextBlock Grid.Row="7" Grid.Column="0" Margin="3" Text="World" />
-                <local:TextBoxDark Grid.Row="7" Grid.Column="1" Margin="3" Text="{Binding World}" />
-
-                <TextBlock Grid.Row="8" Grid.Column="0" Margin="3" Text="Gravity X / Y" />
-                <Grid Grid.Row="8" Grid.Column="1" ColumnDefinitions="*,*">
-                    <local:TextBoxDark Grid.Column="0" Margin="3" Text="{Binding GravityX}" />
-                    <local:TextBoxDark Grid.Column="1" Margin="3" Text="{Binding GravityY}" />
-                </Grid>
-
-                <TextBlock Grid.Row="9" Grid.Column="0" Margin="3" Text="Meters per pixel" />
-                <local:TextBoxDark Grid.Row="9" Grid.Column="1" Margin="3" Text="{Binding MetersPerPixel}" />
-            </Grid>
-        </StackPanel>
-    </ScrollViewer>
+        <!-- right: the room canvas (instances rendered as positioned sprites; pan with middle drag, zoom with wheel) -->
+        <Border Grid.Column="2" Background="#404040" ClipToBounds="True">
+            <ScrollViewer x:Name="CanvasScroll" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                          PointerWheelChanged="Canvas_PointerWheelChanged">
+                <LayoutTransformControl x:Name="CanvasTransform">
+                    <Border x:Name="RoomBorder" BorderBrush="Black" BorderThickness="1">
+                        <ItemsControl x:Name="CanvasItems">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <Canvas />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.Styles>
+                                <Style Selector="ContentPresenter">
+                                    <Setter Property="Canvas.Left" Value="{Binding X}" />
+                                    <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                                </Style>
+                            </ItemsControl.Styles>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="local:RoomDrawable">
+                                    <Image Source="{Binding Image}" Width="{Binding Width}" Height="{Binding Height}" Opacity="{Binding Opacity}"
+                                           RenderOptions.BitmapInterpolationMode="None" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
+                </LayoutTransformControl>
+            </ScrollViewer>
+        </Border>
+    </Grid>
 </local:DataUserControl>
