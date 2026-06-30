@@ -55,6 +55,9 @@
             <MenuItem Header="Scripts">
                 <MenuItem Header="Run script..." Click="RunScriptMenu_Click" />
             </MenuItem>
+            <MenuItem Header="Edit">
+                <MenuItem Header="Settings..." Click="Settings_Click" />
+            </MenuItem>
         </Menu>
 
         <TextBlock DockPanel.Dock="Bottom" x:Name="StatusBar" Margin="4,2" Text="No data file loaded." />

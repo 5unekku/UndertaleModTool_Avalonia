@@ -175,6 +175,11 @@ namespace UndertaleModTool
 
         private void Exit_Click(object sender, RoutedEventArgs e) => Close();
 
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            new SettingsWindow().ShowDialogSync(this);
+        }
+
         private void ResourceTree_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             object selected = (sender as TreeView)?.SelectedItem;

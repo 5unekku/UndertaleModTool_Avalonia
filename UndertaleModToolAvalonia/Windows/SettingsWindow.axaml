@@ -1,0 +1,116 @@
+﻿<Window x:Class="UndertaleModTool.SettingsWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UndertaleModTool"
+        mc:Ignorable="d"
+        Title="Settings" Width="800" SizeToContent="Height" WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Controls/TransparencyGridBrush.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="10">
+            <Grid.Styles>
+                <Style Selector="TextBlock"><Setter Property="Margin" Value="3" /></Style>
+                <Style Selector="CheckBox"><Setter Property="Margin" Value="3" /></Style>
+                <Style Selector="local|TextBoxDark"><Setter Property="Margin" Value="3" /></Style>
+                <Style Selector="local|ButtonDark"><Setter Property="Margin" Value="3" /></Style>
+            </Grid.Styles>
+            <StackPanel Grid.IsSharedSizeScope="True">
+                <Grid ToolTip.Tip="Required only if you want to use the Studio runner rather than the .exe or run the game under debugger." ColumnDefinitions="Auto,*">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition SharedSizeGroup="g1" Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="GameMaker: Studio 1.4 path:" />
+                    <local:TextBoxDark Grid.Column="1" Text="{Binding GameMakerStudioPath}" />
+                </Grid>
+
+                <Grid ToolTip.Tip="Required only if you want to run GMS2 games using the Studio runner rather than the .exe">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition SharedSizeGroup="g1" Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="GameMaker Studio 2 runtimes path:" />
+                    <local:TextBoxDark Grid.Column="1" Text="{Binding GameMakerStudio2RuntimesPath}" />
+                </Grid>
+
+                <Grid ColumnDefinitions="*,*">
+                    <StackPanel Grid.Column="0">
+                        <CheckBox IsChecked="{Binding AssetOrderSwappingEnabled}" Content="Enable asset order swapping" />
+                        <CheckBox IsChecked="{Binding AutomaticFileAssociation}" Content="Automatically associate GameMaker data files" />
+                        <CheckBox IsChecked="{Binding ShowDebuggerOption}" Content="Show &quot;Run game under GMS debugger&quot; file option" />
+                        <CheckBox IsChecked="{Binding RememberWindowPlacements}" Content="Remember last window position and size" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <CheckBox IsChecked="{Binding WarnOnClose}" Content="Warn about saving before closing" />
+                        <CheckBox IsChecked="{Binding TempRunMessageShow}" Content="Warn about temp running" />
+                        <CheckBox IsChecked="{Binding ShowNullEntriesInResourceTree}" Content="Show null entries in resource tree" />
+                        <CheckBox IsChecked="{Binding RecompileAllCodeSourcesOnProjectSave}" Content="Recompile all source GML when saving a project data file" />
+                    </StackPanel>
+                </Grid>
+
+                <Separator Margin="10" />
+
+                <Grid ColumnDefinitions="*,*">
+                    <StackPanel Grid.Column="0">
+                        <CheckBox IsChecked="{Binding EnableDarkMode}" Content="Enable dark mode" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Transparency grid colors:" />
+                            <local:TextBoxDark Width="80" Text="{Binding TransparencyGridColor1}" />
+                            <local:TextBoxDark Width="80" Text="{Binding TransparencyGridColor2}" />
+                            <Canvas Margin="3" Width="16" Height="16" Background="{DynamicResource TransparencyGridBrushBrush}" />
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <local:ButtonDark Click="GMLSettingsButton_Click" Padding="8,2,8,2" HorizontalAlignment="Left" VerticalAlignment="Top" Content="GML compiler/decompiler settings" />
+                    </StackPanel>
+                </Grid>
+
+                <Separator Margin="10" />
+
+                <Grid Grid.IsSharedSizeScope="True" ColumnDefinitions="*,*">
+                    <StackPanel Grid.Column="0">
+                        <Grid ToolTip.Tip="This option globally overrides the automatic assignment of a room's grid width." ColumnDefinitions="Auto,*">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition SharedSizeGroup="g2" Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <CheckBox Name="gridWidthCheckbox" IsChecked="{Binding GridWidthEnabled}" Content="Global grid width" />
+                            <local:TextBoxDark Grid.Column="1" IsEnabled="{Binding #gridWidthCheckbox.IsChecked}" Text="{Binding GlobalGridWidth}" />
+                        </Grid>
+                        <Grid ToolTip.Tip="This option globally overrides the automatic assignment of a room's grid height." ColumnDefinitions="Auto,*">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition SharedSizeGroup="g2" Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <CheckBox Name="gridHeightCheckbox" IsChecked="{Binding GridHeightEnabled}" Content="Global grid height" />
+                            <local:TextBoxDark Grid.Column="1" IsEnabled="{Binding #gridHeightCheckbox.IsChecked}" Text="{Binding GlobalGridHeight}" />
+                        </Grid>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <Grid ToolTip.Tip="This option globally overrides the automatic assignment of a room's grid thickness." ColumnDefinitions="Auto,*">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition SharedSizeGroup="g2" Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <CheckBox Name="gridThicknessCheckBox" IsChecked="{Binding GridThicknessEnabled}" Content="Global grid thickness" />
+                            <local:TextBoxDark Grid.Column="1" IsEnabled="{Binding #gridThicknessCheckBox.IsChecked}" Text="{Binding GlobalGridThickness}" />
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+
+                <Separator Margin="10" />
+
+                <Grid ColumnDefinitions="*,*">
+                    <local:ButtonDark Grid.Column="0" Click="AppDataButton_Click" Padding="8,2,8,2" HorizontalAlignment="Left" Content="Open application data folder" />
+                </Grid>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</Window>
