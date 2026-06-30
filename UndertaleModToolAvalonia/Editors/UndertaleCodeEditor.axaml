@@ -34,9 +34,15 @@
 
         <TabControl x:Name="CodeModeTabs" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" SelectionChanged="TabControl_SelectionChanged">
             <TabItem Header="Decompiled" Name="DecompiledTab">
-                <ae:TextEditor FontFamily="Consolas" Name="DecompiledEditor" IsReadOnly="True"
-                               Background="#222222" LineNumbersForeground="#DBDBDB" Foreground="#C0C0C0"
-                               ShowLineNumbers="True" WordWrap="True" FontSize="13" Padding="4" />
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="2">
+                        <local:ButtonDark Content="Compile (Ctrl+S)" Click="CompileButton_Click" />
+                    </StackPanel>
+                    <ae:TextEditor FontFamily="Consolas" Name="DecompiledEditor" IsReadOnly="False"
+                                   Background="#222222" LineNumbersForeground="#DBDBDB" Foreground="#C0C0C0"
+                                   ShowLineNumbers="True" WordWrap="True" FontSize="13" Padding="4"
+                                   KeyDown="DecompiledEditor_KeyDown" />
+                </DockPanel>
             </TabItem>
             <TabItem Header="Disassembly" Name="DisassemblyTab">
                 <ae:TextEditor FontFamily="Consolas" Name="DisassemblyEditor" IsReadOnly="True"

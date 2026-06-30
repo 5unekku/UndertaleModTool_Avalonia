@@ -2,11 +2,14 @@
 using System.Threading.Tasks;
 using System.Xml;
 using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using AvaloniaEdit.Highlighting;
 using AvaloniaEdit.Highlighting.Xshd;
 using UndertaleModLib;
+using UndertaleModLib.Compiler;
 using UndertaleModLib.Decompiler;
 using UndertaleModLib.Models;
 
@@ -27,6 +30,7 @@ namespace UndertaleModTool
 
         private static MainWindow mainWindow => MainWindow.Instance;
         private static IHighlightingDefinition gmlHighlighting;
+        private bool decompiledReady;
 
         public UndertaleCodeEditor()
         {
@@ -89,11 +93,13 @@ namespace UndertaleModTool
                 return;
             }
 
+            decompiledReady = false;
             DecompiledEditor.Text = "// Decompiling, please wait...";
             UndertaleCode current = code;
             Task.Run(() =>
             {
                 string result;
+                bool ok = true;
                 try
                 {
                     var context = new GlobalDecompileContext(data);
@@ -102,13 +108,81 @@ namespace UndertaleModTool
                 catch (Exception ex)
                 {
                     result = "/*\n  EXCEPTION!\n  " + ex + "\n*/";
+                    ok = false;
                 }
                 Dispatcher.UIThread.Post(() =>
                 {
                     if (DataContext == current)
+                    {
                         DecompiledEditor.Text = result;
+                        decompiledReady = ok;
+                    }
                 });
             });
         }
+
+        private void CompileButton_Click(object sender, RoutedEventArgs e) => CompileCode();
+
+        private void DecompiledEditor_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.S && e.KeyModifiers.HasFlag(KeyModifiers.Control))
+            {
+                e.Handled = true;
+                CompileCode();
+            }
+        }
+
+        // recompiles the edited GML back into the code entry (1:1 with the wpf Ctrl+K compile path).
+        private async void CompileCode()
+        {
+            if (DataContext is not UndertaleCode code || mainWindow?.Data is null)
+                return;
+            if (code.ParentEntry is not null)
+            {
+                mainWindow.ShowMessage("This is a reference to an anonymous function; edit it within its parent entry.");
+                return;
+            }
+            if (!decompiledReady)
+            {
+                mainWindow.ShowMessage("Please wait for decompilation to finish before compiling.");
+                return;
+            }
+
+            string source = DecompiledEditor.Text;
+            UndertaleData data = mainWindow.Data;
+            CompileResult result = default;
+            string rootException = null;
+
+            await Task.Run(() =>
+            {
+                try
+                {
+                    var group = new CompileGroup(data) { MainThreadAction = f => Dispatcher.UIThread.Invoke(f) };
+                    group.QueueCodeReplace(code, source);
+                    result = group.Compile();
+                }
+                catch (Exception ex)
+                {
+                    rootException = ex.ToString();
+                }
+            });
+
+            if (rootException is not null)
+            {
+                mainWindow.ShowError(Truncate(rootException, 512), "Compiler error");
+                return;
+            }
+            if (!result.Successful)
+            {
+                mainWindow.ShowError(Truncate(result.PrintAllErrors(false), 512), "Compiler error");
+                return;
+            }
+
+            mainWindow.ShowMessage("Code compiled successfully.");
+            ShowCode();
+        }
+
+        private static string Truncate(string value, int max)
+            => value.Length <= max ? value : value[..max] + "...";
     }
 }
