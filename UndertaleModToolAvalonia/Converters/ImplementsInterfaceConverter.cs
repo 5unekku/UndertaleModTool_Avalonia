@@ -1,0 +1,20 @@
+﻿using System;
+using System.Globalization;
+using Avalonia.Data.Converters;
+
+namespace UndertaleModTool
+{
+    public class ImplementsInterfaceConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            Type iface = (Type)parameter;
+            return iface.IsAssignableFrom(value?.GetType());
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
