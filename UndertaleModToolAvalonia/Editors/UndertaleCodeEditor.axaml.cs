@@ -44,6 +44,9 @@ namespace UndertaleModTool
             AvaloniaEdit.Search.SearchPanel.Install(DecompiledEditor);
             AvaloniaEdit.Search.SearchPanel.Install(DisassemblyEditor);
 
+            // clickable resource-name links in the decompiled view (ctrl+click navigates)
+            DecompiledEditor.TextArea.TextView.ElementGenerators.Add(new NameLinkGenerator(DecompiledEditor.TextArea));
+
             DataContextChanged += (_, _) => ShowCode();
         }
 

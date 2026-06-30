@@ -45,8 +45,14 @@ namespace UndertaleModTool
 
         public bool ShowNullEntriesInResourceTree { get; set; } = false;
 
-        // note: the wpf MainWindowPlacement (Win32 WINDOWPLACEMENT) is dropped in the avalonia port.
+        // the wpf MainWindowPlacement used a Win32 WINDOWPLACEMENT struct; the avalonia port stores plain,
+        // cross-platform position/size values instead.
         public bool RememberWindowPlacements { get; set; } = false;
+        public double? MainWindowX { get; set; }
+        public double? MainWindowY { get; set; }
+        public double? MainWindowWidth { get; set; }
+        public double? MainWindowHeight { get; set; }
+        public bool MainWindowMaximized { get; set; }
 
         public bool RecompileAllCodeSourcesOnProjectSave { get; set; } = false;
 

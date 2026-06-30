@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using Avalonia;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -39,6 +40,53 @@ namespace UndertaleModTool
             EditorTabs.ItemsSource = Tabs;
             OpenInTab(new DescriptionView("Welcome to UndertaleModTool!",
                 "Open a data.win file to get started, then click items on the left to view them."), true, "Welcome!");
+
+            RestoreWindowPlacement();
+
+            // associate GameMaker data files with the tool (no-op on non-windows platforms)
+            if (Settings.Instance?.AutomaticFileAssociation == true)
+            {
+                try { FileAssociations.CreateAssociations(); } catch { }
+            }
+        }
+
+        // restores the saved cross-platform window position/size (replaces the wpf Win32 WINDOWPLACEMENT handling)
+        private void RestoreWindowPlacement()
+        {
+            var settings = Settings.Instance;
+            if (settings is null || !settings.RememberWindowPlacements)
+                return;
+
+            if (settings.MainWindowWidth is > 0 && settings.MainWindowHeight is > 0)
+            {
+                Width = settings.MainWindowWidth.Value;
+                Height = settings.MainWindowHeight.Value;
+            }
+            if (settings.MainWindowX is double x && settings.MainWindowY is double y)
+            {
+                WindowStartupLocation = WindowStartupLocation.Manual;
+                Position = new PixelPoint((int)x, (int)y);
+            }
+            if (settings.MainWindowMaximized)
+                WindowState = WindowState.Maximized;
+        }
+
+        protected override void OnClosing(WindowClosingEventArgs e)
+        {
+            var settings = Settings.Instance;
+            if (settings is not null && settings.RememberWindowPlacements)
+            {
+                settings.MainWindowMaximized = WindowState == WindowState.Maximized;
+                if (WindowState == WindowState.Normal)
+                {
+                    settings.MainWindowX = Position.X;
+                    settings.MainWindowY = Position.Y;
+                    settings.MainWindowWidth = Width;
+                    settings.MainWindowHeight = Height;
+                }
+                Settings.Save();
+            }
+            base.OnClosing(e);
         }
 
         /// <summary>
