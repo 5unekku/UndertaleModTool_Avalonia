@@ -64,7 +64,8 @@ namespace UndertaleModTool
 
         private void EditorTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (EditorTabs.SelectedItem is Tab tab)
+            // note: this can fire during InitializeComponent before the EditorTabs field is assigned, so use sender
+            if ((sender as TabControl)?.SelectedItem is Tab tab)
             {
                 CurrentTab = tab;
                 Highlighted = tab.CurrentObject;
@@ -176,9 +177,10 @@ namespace UndertaleModTool
 
         private void ResourceTree_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ResourceTree.SelectedItem is null || ResourceTree.SelectedItem is TreeCategory)
+            object selected = (sender as TreeView)?.SelectedItem;
+            if (selected is null || selected is TreeCategory)
                 return;
-            ChangeSelection(ResourceTree.SelectedItem);
+            ChangeSelection(selected);
         }
 
         // builds the resource tree categories from the loaded data (a flat-but-grouped view; the wpf tree is richer)

@@ -42,7 +42,6 @@
         <DataTemplate DataType="undertale:UndertaleEmbeddedImage"><local:UndertaleEmbeddedImageEditor /></DataTemplate>
         <DataTemplate DataType="undertale:UndertaleParticleSystem"><local:UndertaleParticleSystemEditor /></DataTemplate>
         <DataTemplate DataType="undertale:UndertaleParticleSystemEmitter"><local:UndertaleParticleSystemEmitterEditor /></DataTemplate>
-        <DataTemplate DataType="undertale:UndertaleVariableEditor"><local:UndertaleVariableEditor /></DataTemplate>
     </Window.DataTemplates>
 
     <DockPanel>
