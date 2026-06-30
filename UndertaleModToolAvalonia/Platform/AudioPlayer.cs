@@ -40,6 +40,26 @@ namespace UndertaleModTool
             output.Play();
         }
 
+        public void PlayFile(string path)
+        {
+            Stop();
+
+            reader = Path.GetExtension(path).ToLower() switch
+            {
+                ".wav" => new WaveFileReader(path),
+                ".ogg" => new VorbisWaveReader(path),
+                ".mp3" => new Mp3FileReader(path),
+                _ => throw new Exception("Unknown file type.")
+            };
+
+            if (!OperatingSystem.IsWindows())
+                throw new PlatformNotSupportedException("Audio playback is only available on Windows in this build.");
+
+            output = new WaveOutEvent { DeviceNumber = 0 };
+            output.Init(reader);
+            output.Play();
+        }
+
         public void Stop()
         {
             output?.Stop();

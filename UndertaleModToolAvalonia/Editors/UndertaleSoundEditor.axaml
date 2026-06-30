@@ -1,0 +1,69 @@
+﻿<local:DataUserControl x:Class="UndertaleModTool.UndertaleSoundEditor"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:UndertaleModTool"
+             xmlns:undertale="clr-namespace:UndertaleModLib.Models;assembly=UndertaleModLib"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Margin="3" Text="Name" />
+        <local:UndertaleStringReference Grid.Row="0" Grid.Column="1" Margin="3" ObjectReference="{Binding Name}" />
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Margin="3" Text="Flags" />
+        <local:FlagsBox Grid.Row="1" Grid.Column="1" Margin="3" Value="{Binding Flags}" />
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Margin="3" Text="Type" />
+        <local:UndertaleStringReference Grid.Row="2" Grid.Column="1" Margin="3" ObjectReference="{Binding Type}" />
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Margin="3" Text="File" />
+        <local:UndertaleStringReference Grid.Row="3" Grid.Column="1" Margin="3" ObjectReference="{Binding File}" />
+
+        <TextBlock Grid.Row="4" Grid.Column="0" Margin="3" Text="Effects" />
+        <local:TextBoxDark Grid.Row="4" Grid.Column="1" Margin="3" Text="{Binding Effects}" />
+
+        <TextBlock Grid.Row="5" Grid.Column="0" Margin="3" Text="Volume" />
+        <local:TextBoxDark Grid.Row="5" Grid.Column="1" Margin="3" Text="{Binding Volume}" />
+
+        <TextBlock Grid.Row="6" Grid.Column="0" Margin="3" Text="Pitch" />
+        <local:TextBoxDark Grid.Row="6" Grid.Column="1" Margin="3" Text="{Binding Pitch}" />
+
+        <TextBlock Grid.Row="7" Grid.Column="0" Margin="3" Text="Audio group" />
+        <local:UndertaleObjectReference Grid.Row="7" Grid.Column="1" Margin="3" ObjectReference="{Binding AudioGroup}" ObjectType="{x:Type undertale:UndertaleAudioGroup}" />
+
+        <TextBlock Grid.Row="8" Grid.Column="0" Margin="3" Text="Audio file" />
+        <local:AudioFileReference Grid.Row="8" Grid.Column="1" Margin="3" AudioReference="{Binding AudioFile}" GroupReference="{Binding AudioGroup}" AudioID="{Binding AudioID}" GroupID="{Binding GroupID}" />
+
+        <TextBlock Grid.Row="9" Grid.Column="0" Margin="3" Text="Preload (old audio system)" />
+        <CheckBox Grid.Row="9" Grid.Column="1" Margin="3" IsChecked="{Binding Preload}" />
+
+        <Grid Grid.Row="11" Grid.Column="1" Name="AudioPlayerControls">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <local:ButtonDark Grid.Column="0" x:Name="Play" Click="Play_Click" Margin="3,0" Content="Play" />
+            <local:ButtonDark Grid.Column="1" x:Name="Stop" Click="Stop_Click" Margin="3,0" Content="Stop" />
+        </Grid>
+    </Grid>
+</local:DataUserControl>
