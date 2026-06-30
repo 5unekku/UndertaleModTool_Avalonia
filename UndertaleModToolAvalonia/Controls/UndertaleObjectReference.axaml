@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="UndertaleModTool.UndertaleObjectReference"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:UndertaleModTool"
+             xmlns:undertale="clr-namespace:UndertaleModLib.Models;assembly=UndertaleModLib"
+             mc:Ignorable="d"
+             d:DesignHeight="20" d:DesignWidth="300"
+             Name="objectReference">
+    <UserControl.Resources>
+        <local:ContextMenuDark x:Key="contextMenu" Opened="MenuItem_ContextMenuOpened">
+            <MenuItem Header="Open in new tab" Click="OpenInNewTabItem_Click" />
+            <MenuItem Header="Find all references" Click="FindAllReferencesItem_Click" />
+        </local:ContextMenuDark>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <local:TextBoxDark Grid.Column="0" x:Name="ObjectText" IsReadOnly="True"
+                           PointerPressed="Details_MouseDown" DoubleTapped="TextBox_MouseDoubleClick"
+                           Text="{Binding ObjectReference, ElementName=objectReference}" />
+        <local:ButtonDark Grid.Column="1" x:Name="DetailsButton" Content=" ... "
+                          Click="Details_Click" PointerPressed="Details_MouseDown" />
+        <local:ButtonDark Grid.Column="2" x:Name="RemoveButton" Content=" X "
+                          ToolTip.Tip="Remove reference" Click="Remove_Click" />
+    </Grid>
+</UserControl>

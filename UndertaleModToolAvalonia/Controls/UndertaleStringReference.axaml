@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="UndertaleModTool.UndertaleStringReference"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:UndertaleModTool"
+             mc:Ignorable="d"
+             d:DesignHeight="20" d:DesignWidth="300"
+             Name="stringReference">
+    <UserControl.Resources>
+        <local:ContextMenuDark x:Key="contextMenu" Opened="MenuItem_ContextMenuOpened">
+            <MenuItem Header="Open in new tab" Click="OpenInNewTabItem_Click" />
+            <MenuItem Header="Find all references" Click="FindAllReferencesItem_Click" />
+        </local:ContextMenuDark>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <local:TextBoxDark Grid.Column="0" x:Name="ObjectText"
+                           ToolTip.Tip="This is a string reference. Change the value here to edit just this value of all referenced values, or drag and drop another string instance from the tree on the left to change the reference."
+                           LostFocus="TextBox_LostFocus" PointerPressed="Details_MouseDown" />
+        <local:ButtonDark Grid.Column="1" x:Name="DetailsButton" Content=" ... "
+                          ToolTip.Tip="Open referenced object" Click="Details_Click" PointerPressed="Details_MouseDown" />
+    </Grid>
+</UserControl>
