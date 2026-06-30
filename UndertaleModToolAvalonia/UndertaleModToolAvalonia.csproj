@@ -29,11 +29,12 @@
         <ProjectReference Include="..\UndertaleModLib\UndertaleModLib.csproj" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version="11.3.18" />
-        <PackageReference Include="Avalonia.Desktop" Version="11.3.18" />
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.18" />
-        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.18" />
-        <PackageReference Include="Avalonia.Diagnostics" Version="11.3.18" Condition="'$(Configuration)' == 'Debug'" />
+        <PackageReference Include="Avalonia" Version="11.3.13" />
+        <PackageReference Include="Avalonia.Desktop" Version="11.3.13" />
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.13" />
+        <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.13" />
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.13" />
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.3.13" Condition="'$(Configuration)' == 'Debug'" />
         <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.3.0" />
         <PackageReference Include="log4net" Version="3.3.2" />
         <PackageReference Include="NAudio" Version="2.3.0" />
