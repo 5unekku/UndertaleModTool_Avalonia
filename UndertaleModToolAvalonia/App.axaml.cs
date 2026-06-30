@@ -13,6 +13,9 @@ namespace UndertaleModTool
 
         public override void OnFrameworkInitializationCompleted()
         {
+            // load user settings (decompiler options, grid, etc.) before the main window
+            try { Settings.Load(); } catch { }
+
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
                 desktop.MainWindow = new MainWindow();
 

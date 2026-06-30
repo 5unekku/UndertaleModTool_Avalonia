@@ -11,6 +11,9 @@ namespace UndertaleModTool
     // AvaloniaObject already owns a PropertyChanged event, so INotifyPropertyChanged needs care here).
     public partial class MainWindow
     {
+        /// <summary>the application version string.</summary>
+        public const string Version = "0.9.1.1";
+
         /// <summary>path of the currently open data file.</summary>
         public string FilePath { get; set; }
 
