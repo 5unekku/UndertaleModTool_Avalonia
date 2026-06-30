@@ -1,7 +1,8 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Avalonia.Media.Imaging;
 using UndertaleModLib;
+using UndertaleModLib.Util;
 
 namespace UndertaleModTool
 {
@@ -25,6 +26,15 @@ namespace UndertaleModTool
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
+        }
+
+        /// <summary>
+        /// returns an avalonia bitmap for the given <see cref="GMImage"/>, reusing a cached instance when one is
+        /// still alive. (1:1 with the wpf method of the same name, which returned a <c>BitmapSource</c>.)
+        /// </summary>
+        public Bitmap GetBitmapSourceForImage(GMImage image)
+        {
+            return TextureCache.GetBitmap(image);
         }
     }
 }
