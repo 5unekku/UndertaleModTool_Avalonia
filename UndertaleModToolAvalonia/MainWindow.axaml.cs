@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -24,13 +25,71 @@ namespace UndertaleModTool
         /// <summary>the currently loaded data file, or null if nothing is open.</summary>
         public UndertaleData Data { get; set; }
 
+        /// <summary>the open editor tabs.</summary>
+        public ObservableCollection<Tab> Tabs { get; } = new();
+
+        /// <summary>the currently active tab.</summary>
+        public Tab CurrentTab { get; set; }
+
         public MainWindow()
         {
             Instance = this;
             InitializeComponent();
 
-            ChangeSelection(new DescriptionView("Welcome to UndertaleModTool!",
-                "Open a data.win file to get started, then click items on the left to view them."));
+            EditorTabs.ItemsSource = Tabs;
+            OpenInTab(new DescriptionView("Welcome to UndertaleModTool!",
+                "Open a data.win file to get started, then click items on the left to view them."), true, "Welcome!");
+        }
+
+        /// <summary>
+        /// opens a resource in the tab host: navigates the current tab, or creates a new tab when requested
+        /// (or when there is no current tab). the editor for the resource is chosen by the window data templates.
+        /// </summary>
+        internal void OpenInTab(object obj, bool isNewTab = false, string tabTitle = null)
+        {
+            Highlighted = obj;
+
+            if (isNewTab || CurrentTab is null || Tabs.Count == 0)
+            {
+                var tab = new Tab(obj, Tabs.Count, tabTitle);
+                Tabs.Add(tab);
+                CurrentTab = tab;
+                EditorTabs.SelectedItem = tab;
+            }
+            else
+            {
+                CurrentTab.NavigateTo(obj);
+            }
+        }
+
+        private void EditorTabs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (EditorTabs.SelectedItem is Tab tab)
+            {
+                CurrentTab = tab;
+                Highlighted = tab.CurrentObject;
+            }
+        }
+
+        private void CloseTab_Click(object sender, RoutedEventArgs e)
+        {
+            if ((sender as Control)?.Tag is not Tab tab)
+                return;
+
+            int index = Tabs.IndexOf(tab);
+            Tabs.Remove(tab);
+            for (int i = 0; i < Tabs.Count; i++)
+                Tabs[i].TabIndex = i;
+
+            if (Tabs.Count == 0)
+            {
+                OpenInTab(new DescriptionView("Welcome to UndertaleModTool!", "Open a data.win file to get started."), true, "Welcome!");
+            }
+            else if (CurrentTab == tab)
+            {
+                CurrentTab = Tabs[System.Math.Min(index, Tabs.Count - 1)];
+                EditorTabs.SelectedItem = CurrentTab;
+            }
         }
 
         /// <summary>

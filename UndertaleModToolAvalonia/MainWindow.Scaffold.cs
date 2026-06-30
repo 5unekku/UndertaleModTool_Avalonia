@@ -38,20 +38,12 @@ namespace UndertaleModTool
             && (info.Major >= 2 || (info.Major == 1 && (info.Build >= 1773 || info.Build == 1539)));
 
         /// <summary>
-        /// shows the given resource in the right-hand editor host (the DataTemplates in MainWindow.axaml pick the
-        /// matching editor). the wpf tab system is not yet ported, so a "new tab" just replaces the current view.
+        /// navigates the tab host to the given resource (new tab when requested). the matching editor is chosen
+        /// by the window data templates. (OpenInTab lives in MainWindow.axaml.cs with the tab state.)
         /// </summary>
         public void ChangeSelection(object newsel, bool inNewTab = false)
         {
-            Highlighted = newsel;
-            if (DataEditor is not null)
-                DataEditor.Content = newsel;
-        }
-
-        /// <summary>opens the given resource in the editor host (tabs not yet ported).</summary>
-        internal void OpenInTab(object obj, bool isNewTab = false, string tabTitle = null)
-        {
-            ChangeSelection(obj, isNewTab);
+            OpenInTab(newsel, inNewTab);
         }
 
         /// <summary>prompts to save the current data file. (full implementation: phase 9)</summary>

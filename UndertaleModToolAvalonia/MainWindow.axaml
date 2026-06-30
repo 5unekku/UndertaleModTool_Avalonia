@@ -6,6 +6,45 @@
         Title="UndertaleModTool"
         Width="1280" Height="720"
         Icon="/icon.ico">
+    <Window.DataTemplates>
+        <DataTemplate DataType="local:DescriptionView">
+            <StackPanel>
+                <TextBlock Text="{Binding Heading}" FontWeight="Bold" FontSize="16" Margin="3" />
+                <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Margin="3" />
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate DataType="local:GeneralInfoEditor"><local:UndertaleGeneralInfoEditor /></DataTemplate>
+        <DataTemplate DataType="local:GlobalInitEditor"><local:UndertaleGlobalInitEditor /></DataTemplate>
+        <DataTemplate DataType="local:GameEndEditor"><local:UndertaleGameEndEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleAudioGroup"><local:UndertaleAudioGroupEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleSound"><local:UndertaleSoundEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleSprite"><local:UndertaleSpriteEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleBackground"><local:UndertaleBackgroundEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertalePath"><local:UndertalePathEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleScript"><local:UndertaleScriptEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleShader"><local:UndertaleShaderEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleFont"><local:UndertaleFontEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleTimeline"><local:UndertaleTimelineEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleGameObject"><local:UndertaleGameObjectEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleRoom"><local:UndertaleRoomEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleExtension"><local:UndertaleExtensionEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleExtensionFunction"><local:UndertaleExtensionFunctionEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleExtensionFile"><local:UndertaleExtensionFileEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleTexturePageItem"><local:UndertaleTexturePageItemEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleCode"><local:UndertaleCodeEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleVariable"><local:UndertaleVariableEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleFunction"><local:UndertaleFunctionEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleCodeLocals"><local:UndertaleCodeLocalsEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleString"><local:UndertaleStringEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleEmbeddedTexture"><local:UndertaleEmbeddedTextureEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleEmbeddedAudio"><local:UndertaleEmbeddedAudioEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleTextureGroupInfo"><local:UndertaleTextureGroupInfoEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleEmbeddedImage"><local:UndertaleEmbeddedImageEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleParticleSystem"><local:UndertaleParticleSystemEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleParticleSystemEmitter"><local:UndertaleParticleSystemEmitterEditor /></DataTemplate>
+        <DataTemplate DataType="undertale:UndertaleVariableEditor"><local:UndertaleVariableEditor /></DataTemplate>
+    </Window.DataTemplates>
+
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File">
@@ -32,47 +71,23 @@
 
             <GridSplitter Grid.Column="1" ResizeDirection="Columns" />
 
-            <ScrollViewer Grid.Column="2">
-                <ContentControl x:Name="DataEditor" Margin="10">
-                    <ContentControl.DataTemplates>
-                        <DataTemplate DataType="local:DescriptionView">
-                            <StackPanel>
-                                <TextBlock Text="{Binding Heading}" FontWeight="Bold" FontSize="16" Margin="3" />
-                                <TextBlock Text="{Binding Description}" TextWrapping="Wrap" Margin="3" />
-                            </StackPanel>
-                        </DataTemplate>
-                        <DataTemplate DataType="local:GeneralInfoEditor"><local:UndertaleGeneralInfoEditor /></DataTemplate>
-                        <DataTemplate DataType="local:GlobalInitEditor"><local:UndertaleGlobalInitEditor /></DataTemplate>
-                        <DataTemplate DataType="local:GameEndEditor"><local:UndertaleGameEndEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleAudioGroup"><local:UndertaleAudioGroupEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleSound"><local:UndertaleSoundEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleSprite"><local:UndertaleSpriteEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleBackground"><local:UndertaleBackgroundEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertalePath"><local:UndertalePathEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleScript"><local:UndertaleScriptEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleShader"><local:UndertaleShaderEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleFont"><local:UndertaleFontEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleTimeline"><local:UndertaleTimelineEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleGameObject"><local:UndertaleGameObjectEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleRoom"><local:UndertaleRoomEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleExtension"><local:UndertaleExtensionEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleExtensionFunction"><local:UndertaleExtensionFunctionEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleExtensionFile"><local:UndertaleExtensionFileEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleTexturePageItem"><local:UndertaleTexturePageItemEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleCode"><local:UndertaleCodeEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleVariable"><local:UndertaleVariableEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleFunction"><local:UndertaleFunctionEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleCodeLocals"><local:UndertaleCodeLocalsEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleString"><local:UndertaleStringEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleEmbeddedTexture"><local:UndertaleEmbeddedTextureEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleEmbeddedAudio"><local:UndertaleEmbeddedAudioEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleTextureGroupInfo"><local:UndertaleTextureGroupInfoEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleEmbeddedImage"><local:UndertaleEmbeddedImageEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleParticleSystem"><local:UndertaleParticleSystemEditor /></DataTemplate>
-                        <DataTemplate DataType="undertale:UndertaleParticleSystemEmitter"><local:UndertaleParticleSystemEmitterEditor /></DataTemplate>
-                    </ContentControl.DataTemplates>
-                </ContentControl>
-            </ScrollViewer>
+            <TabControl Grid.Column="2" x:Name="EditorTabs" SelectionChanged="EditorTabs_SelectionChanged">
+                <TabControl.ItemTemplate>
+                    <DataTemplate DataType="local:Tab">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <TextBlock Text="{Binding TabTitle}" VerticalAlignment="Center" />
+                            <Button Content="✕" Padding="4,0" FontSize="10" Click="CloseTab_Click" Tag="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </TabControl.ItemTemplate>
+                <TabControl.ContentTemplate>
+                    <DataTemplate DataType="local:Tab">
+                        <ScrollViewer>
+                            <ContentControl Content="{Binding CurrentObject}" Margin="10" />
+                        </ScrollViewer>
+                    </DataTemplate>
+                </TabControl.ContentTemplate>
+            </TabControl>
         </Grid>
     </DockPanel>
 </Window>
