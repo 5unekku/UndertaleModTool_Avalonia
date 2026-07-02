@@ -293,6 +293,9 @@ public partial class Program : IScriptInterface
             projectBuildCommand
         };
 
+        // documentation only: --gui is intercepted as the first argument before this Main ever runs, see UndertaleModToolAvalonia/Program.cs
+        Option<bool> guiOption = new("--gui") { Description = "Launch the GUI instead of the cli (must be the first argument)" };
+
         // Merge everything together
         RootCommand rootCommand =
         [
@@ -303,6 +306,7 @@ public partial class Program : IScriptInterface
             replaceCommand,
             projectCommand
         ];
+        rootCommand.Add(guiOption);
         rootCommand.Description = "CLI tool for modding, decompiling and unpacking Undertale (and other GameMaker games)!";
         ParseResult parseResult = rootCommand.Parse(args);
         return parseResult.Invoke();
