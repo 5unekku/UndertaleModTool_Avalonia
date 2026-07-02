@@ -59,7 +59,11 @@
 
                 <Grid ColumnDefinitions="*,*">
                     <StackPanel Grid.Column="0">
-                        <CheckBox IsChecked="{Binding EnableDarkMode}" Content="Enable dark mode" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Theme:" VerticalAlignment="Center" />
+                            <local:ComboBoxDark Width="100" ItemsSource="{local:EnumValues local:Settings+ThemePreferenceKind}"
+                                                 SelectedItem="{Binding ThemePreference}" SelectionChanged="ThemeComboBox_SelectionChanged" />
+                        </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Transparency grid colors:" />
                             <local:TextBoxDark Width="80" Text="{Binding TransparencyGridColor1}" />

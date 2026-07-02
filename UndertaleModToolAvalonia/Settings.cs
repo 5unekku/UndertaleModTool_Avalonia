@@ -3,6 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Avalonia;
+using Avalonia.Styling;
 using Underanalyzer.Decompiler;
 
 namespace UndertaleModTool
@@ -37,7 +39,15 @@ namespace UndertaleModTool
         public string TransparencyGridColor1 { get; set; } = "#FF666666";
         public string TransparencyGridColor2 { get; set; } = "#FF999999";
 
-        public bool EnableDarkMode { get; set; } = false;
+        [JsonConverter(typeof(JsonStringEnumConverter<ThemePreferenceKind>))]
+        public enum ThemePreferenceKind
+        {
+            System,
+            Light,
+            Dark
+        }
+
+        public ThemePreferenceKind ThemePreference { get; set; } = ThemePreferenceKind.System;
         public bool ShowDebuggerOption { get; set; } = false;
         public DecompilerSettings DecompilerSettings { get; set; }
         public const string DefaultInstanceIdPrefix = "inst_";
@@ -109,6 +119,20 @@ namespace UndertaleModTool
                 MessageBox.Show($"Failed to load settings.json! Using default values.\n{e.Message}");
                 new Settings() { DecompilerSettings = existingDecompilerSettings ?? new() };
             }
+        }
+
+        /// <summary>applies <see cref="ThemePreference"/> to the running app; call on startup and whenever the setting changes.</summary>
+        public static void ApplyTheme()
+        {
+            if (Application.Current is not { } app)
+                return;
+
+            app.RequestedThemeVariant = Instance.ThemePreference switch
+            {
+                ThemePreferenceKind.Light => ThemeVariant.Light,
+                ThemePreferenceKind.Dark => ThemeVariant.Dark,
+                _ => ThemeVariant.Default
+            };
         }
 
         public static void Save()

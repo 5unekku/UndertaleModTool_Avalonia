@@ -20,6 +20,11 @@ namespace UndertaleModTool
             base.OnClosing(e);
         }
 
+        private void ThemeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Settings.ApplyTheme();
+        }
+
         private void AppDataButton_Click(object sender, RoutedEventArgs e)
         {
             try
