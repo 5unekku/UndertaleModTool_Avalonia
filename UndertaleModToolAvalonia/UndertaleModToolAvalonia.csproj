@@ -27,6 +27,8 @@
     <ItemGroup>
         <ProjectReference Include="..\Underanalyzer\Underanalyzer\Underanalyzer.csproj" />
         <ProjectReference Include="..\UndertaleModLib\UndertaleModLib.csproj" />
+        <!-- cli is a library here, this exe dispatches to it when the gui flag is absent, see Program.cs -->
+        <ProjectReference Include="..\UndertaleModCli\UndertaleModCli.csproj" />
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="11.3.13" />

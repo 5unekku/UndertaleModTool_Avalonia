@@ -22,13 +22,23 @@ namespace UndertaleModTool
                              .LogToTrace();
         }
 
+        // single merged executable: bare/cli-arg invocation goes to UndertaleModCli, "--gui" launches the avalonia app.
+        // desktop entries and shortcuts pass "--gui" explicitly; a plain terminal invocation is most likely a cli user.
         [STAThread]
-        public static void Main(string[] args)
+        public static int Main(string[] args)
+        {
+            if (args.Length > 0 && args[0] == "--gui")
+                return RunGui(args[1..]);
+
+            return UndertaleModCli.Program.Main(args);
+        }
+
+        private static int RunGui(string[] args)
         {
             AppDomain.CurrentDomain.UnhandledException += GlobalUnhandledExceptionHandler;
             try
             {
-                BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+                return BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
             }
             catch (Exception e)
             {

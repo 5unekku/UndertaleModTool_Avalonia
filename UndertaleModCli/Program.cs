@@ -113,7 +113,7 @@ public partial class Program : IScriptInterface
         // Give a friendly message when not running from an actual console, on Windows... (and when no arguments are passed in)
         if (OperatingSystem.IsWindows() && args.Length == 0 && Console.GetCursorPosition() == (0, 0))
         {
-            Console.WriteLine("UndertaleModCli is meant to be executed from a command line terminal/console.\nDid you mean to download the GUI version of UndertaleModTool instead?\n\n(Press any key to dismiss this message.)");
+            Console.WriteLine("UndertaleModTool is meant to be executed from a command line terminal/console.\nDid you mean to launch the GUI instead? Pass --gui, or use the desktop/start menu shortcut.\n\n(Press any key to dismiss this message.)");
             Console.ReadKey();
             return EXIT_FAILURE;
         }
@@ -865,13 +865,44 @@ public partial class Program : IScriptInterface
         if (Verbose)
             Console.WriteLine($"Dumping {code.Name?.Content}");
 
-        string dest = Paths.TryJoinVerifyWithinDirectory(directory, $"{code.Name?.Content}.gml");
+        string dest = Paths.TryJoinVerifyWithinDirectory(directory, MakeSafeDumpFileName(code.Name?.Content));
         if (dest is null)
         {
             Console.Error.WriteLine($"Failed to export code entry with name {code.Name?.Content}");
             return;
         }
-        File.WriteAllText(dest, GetDecompiledText(code, context, settings));
+        try
+        {
+            File.WriteAllText(dest, GetDecompiledText(code, context, settings));
+        }
+        catch (Exception e)
+        {
+            // one bad entry must not abort a UMT_DUMP_ALL sweep (runs under Parallel.ForEach)
+            Console.Error.WriteLine($"Failed to write code entry {code.Name?.Content}: {e.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Builds a filesystem-safe file name for a dumped code entry. Most entry names are short and
+    /// used verbatim; GameMaker's nested-anonymous-function names can exceed the OS per-component
+    /// limit (NAME_MAX = 255 bytes on Linux: ext4, btrfs, etc.), which makes
+    /// <see cref="File.WriteAllText"/> throw ENAMETOOLONG. Such names are shortened deterministically
+    /// to a readable prefix plus a short content hash for uniqueness, keeping the ".gml" extension.
+    /// Short names are unchanged.
+    /// </summary>
+    private static string MakeSafeDumpFileName(string entryName)
+    {
+        entryName ??= "unnamed";
+        string fileName = $"{entryName}.gml";
+        const int maxBytes = 200; // headroom under the 255-byte NAME_MAX
+        if (System.Text.Encoding.UTF8.GetByteCount(fileName) <= maxBytes)
+            return fileName;
+
+        string hash;
+        using (var sha = System.Security.Cryptography.SHA256.Create())
+            hash = System.Convert.ToHexString(sha.ComputeHash(System.Text.Encoding.UTF8.GetBytes(entryName)))[..16];
+        string prefix = entryName.Length > 150 ? entryName[..150] : entryName;
+        return $"{prefix}__{hash}.gml";
     }
 
     /// <summary>

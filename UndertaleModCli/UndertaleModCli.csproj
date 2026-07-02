@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <!-- library only: the avalonia project is the single merged executable, dispatching to Program.Main below for the cli path -->
+    <OutputType>Library</OutputType>
     <TargetFramework>net10.0</TargetFramework>
     <Platforms>AnyCPU;x64</Platforms>
     <Nullable>disable</Nullable>
@@ -24,12 +25,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Underanalyzer\Underanalyzer\Underanalyzer.csproj" />
     <ProjectReference Include="..\UndertaleModLib\UndertaleModLib.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="runtimeconfig.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>
