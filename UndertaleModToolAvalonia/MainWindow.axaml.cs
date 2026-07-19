@@ -256,6 +256,11 @@ namespace UndertaleModTool
             object selected = (sender as TreeView)?.SelectedItem;
             if (selected is null || selected is TreeCategory)
                 return;
+            if (selected is TreeLeaf leaf)
+            {
+                ChangeSelection(leaf.Target);
+                return;
+            }
             ChangeSelection(selected);
         }
 
@@ -279,7 +284,20 @@ namespace UndertaleModTool
             bool hasFilter = !string.IsNullOrWhiteSpace(filter);
             string trimmed = filter?.Trim();
 
-            var categories = new List<TreeCategory>();
+            var nodes = new List<object>();
+
+            // standalone editors at the top (wpf shows these as leaf nodes under "Data"); hidden while filtering
+            // by name since they have no searchable resource name.
+            if (!hasFilter)
+            {
+                if (Data.GeneralInfo is not null)
+                    nodes.Add(new TreeLeaf("General info", new GeneralInfoEditor(Data.GeneralInfo, Data.Options, Data.Language)));
+                if (Data.GlobalInitScripts is not null)
+                    nodes.Add(new TreeLeaf("Global init", new GlobalInitEditor(Data.GlobalInitScripts)));
+                if (Data.GameEndScripts is not null)
+                    nodes.Add(new TreeLeaf("Game End scripts", new GameEndEditor(Data.GameEndScripts)));
+            }
+
             void Add(string name, IEnumerable items)
             {
                 if (items is null)
@@ -287,7 +305,7 @@ namespace UndertaleModTool
                 IEnumerable shown = hasFilter
                     ? items.Cast<object>().Where(o => MatchesFilter(o, trimmed)).ToList()
                     : items;
-                categories.Add(new TreeCategory(name, shown));
+                nodes.Add(new TreeCategory(name, shown));
             }
 
             Add("Audio Groups", Data.AudioGroups);
@@ -315,7 +333,7 @@ namespace UndertaleModTool
             Add("Particle Systems", Data.ParticleSystems);
             Add("Particle System Emitters", Data.ParticleSystemEmitters);
 
-            ResourceTree.ItemsSource = categories;
+            ResourceTree.ItemsSource = nodes;
         }
     }
 
@@ -329,6 +347,19 @@ namespace UndertaleModTool
         {
             Name = name;
             Items = items;
+        }
+    }
+
+    /// <summary>a single leaf node in the resource tree that opens a fixed editor target (general info, etc.).</summary>
+    public class TreeLeaf
+    {
+        public string Name { get; }
+        public object Target { get; }
+
+        public TreeLeaf(string name, object target)
+        {
+            Name = name;
+            Target = target;
         }
     }
 }

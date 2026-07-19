@@ -89,6 +89,9 @@
                         <TreeDataTemplate DataType="local:TreeCategory" ItemsSource="{Binding Items}">
                             <TextBlock Text="{Binding Name}" FontWeight="Bold" />
                         </TreeDataTemplate>
+                        <DataTemplate DataType="local:TreeLeaf">
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
                     </TreeView.DataTemplates>
                 </TreeView>
             </DockPanel>
