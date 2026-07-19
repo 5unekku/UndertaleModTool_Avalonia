@@ -1,10 +1,13 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using UndertaleModLib;
 using UndertaleModLib.Models;
+using UndertaleModLib.Project;
 
 namespace UndertaleModTool
 {
@@ -44,7 +47,13 @@ namespace UndertaleModTool
             object target = (e.Source as Control)?.DataContext;
             var menu = new ContextMenu();
 
-            if (target is TreeLeaf leaf)
+            if (target is TreeCategory cat)
+            {
+                if (cat.Source is null)
+                    return;
+                AddMenuItem(menu, "Add", () => AddResource(cat.Source));
+            }
+            else if (target is TreeLeaf leaf)
             {
                 AddMenuItem(menu, "Open in new tab", () => ChangeSelection(leaf.Target, true));
             }
@@ -56,7 +65,6 @@ namespace UndertaleModTool
             }
             else
             {
-                // categories (Add not ported yet) and empty space: no menu
                 return;
             }
 
@@ -111,6 +119,162 @@ namespace UndertaleModTool
             }
 
             BuildTree(SearchBox?.Text);
+        }
+
+        // whether a string is a valid GML asset identifier (letters/digits/underscore, not starting with a digit)
+        private static bool IsValidAssetIdentifier(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                return false;
+            char firstChar = name[0];
+            if (!char.IsAsciiLetter(firstChar) && firstChar != '_')
+                return false;
+            foreach (char c in name.Skip(1))
+            {
+                if (!char.IsAsciiLetterOrDigit(c) && c != '_')
+                    return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// creates a new resource of the list's element type, names it (with per-type initialization), adds it,
+        /// and opens it in a new tab. 1:1 port of the wpf MenuItem_Add_Click.
+        /// </summary>
+        internal void AddResource(IList list)
+        {
+            if (Data is null || list is null)
+                return;
+
+            Type t;
+            try
+            {
+                t = list.GetType().GetGenericArguments()[0];
+            }
+            catch (Exception ex)
+            {
+                ScriptError("An error occurred while trying to add the menu item. No action has been taken.\r\n\r\nError:\r\n\r\n" + ex);
+                return;
+            }
+            if (!typeof(UndertaleResource).IsAssignableFrom(t))
+                return;
+
+            UndertaleResource obj = Activator.CreateInstance(t) as UndertaleResource;
+            if (obj is UndertaleNamedResource namedResource)
+            {
+                bool doMakeString = obj is not (UndertaleTexturePageItem or UndertaleEmbeddedAudio or UndertaleEmbeddedTexture);
+                string notDataNewName = null;
+                if (obj is UndertaleTexturePageItem)
+                    notDataNewName = "PageItem " + list.Count;
+                if (obj is UndertaleEmbeddedAudio)
+                    notDataNewName = "EmbeddedSound " + list.Count;
+                if (obj is UndertaleEmbeddedTexture)
+                    notDataNewName = "Texture " + list.Count;
+
+                if (doMakeString)
+                {
+                    string assetTypeName = obj.GetType().Name.Replace("Undertale", "").Replace("GameObject", "Object").ToLower();
+                    string newName = $"{assetTypeName}{list.Count}";
+                    string userNewName = ScriptInputDialog($"Choose new {assetTypeName} name", "Name of new asset:", newName, "Cancel", "Create", false, false);
+                    if (userNewName is null)
+                        return; // user canceled
+                    if (IsValidAssetIdentifier(userNewName))
+                    {
+                        newName = userNewName;
+                    }
+                    else if (this.ShowQuestionWithCancel($"Asset name \"{userNewName}\" is not a valid identifier. Add a new asset using an auto-generated name instead?",
+                                 MessageBoxImage.Warning, "Invalid name") != MessageBoxResult.Yes)
+                    {
+                        return;
+                    }
+
+                    namedResource.Name = Data.Strings.MakeString(newName);
+
+                    if (obj is UndertaleRoom roomResource)
+                    {
+                        if (Data.IsGameMaker2())
+                        {
+                            roomResource.Caption = null;
+                            roomResource.Backgrounds.Clear();
+                            if (Data.IsVersionAtLeast(2024, 13))
+                            {
+                                roomResource.Flags |= UndertaleRoom.RoomEntryFlags.IsGM2024_13;
+                                roomResource.InstanceCreationOrderIDs ??= new();
+                            }
+                            else
+                            {
+                                roomResource.Flags |= UndertaleRoom.RoomEntryFlags.IsGMS2;
+                                if (Data.IsVersionAtLeast(2, 3))
+                                    roomResource.Flags |= UndertaleRoom.RoomEntryFlags.IsGMS2_3;
+                            }
+                        }
+                        else
+                        {
+                            roomResource.Caption = Data.Strings.MakeString("");
+                        }
+
+                        if (this.ShowQuestion("Add the new room to the end of the room order list?", MessageBoxImage.Question, "Add to room order list") == MessageBoxResult.Yes)
+                            Data.GeneralInfo.RoomOrder.Add(new(roomResource));
+                    }
+                    else if (obj is UndertaleScript scriptResource)
+                    {
+                        if (Data.IsVersionAtLeast(2, 3))
+                        {
+                            scriptResource.Code = UndertaleCode.CreateEmptyEntry(Data, $"gml_GlobalScript_{newName}");
+                            if (Data.GlobalInitScripts is IList<UndertaleGlobalInit> globalInitScripts)
+                                globalInitScripts.Add(new UndertaleGlobalInit() { Code = scriptResource.Code });
+                        }
+                        else
+                        {
+                            scriptResource.Code = UndertaleCode.CreateEmptyEntry(Data, $"gml_Script_{newName}");
+                        }
+                        Project?.MarkAssetForExport(scriptResource.Code);
+                    }
+                    else if (obj is UndertaleCode codeResource)
+                    {
+                        if (Data.CodeLocals is not null)
+                        {
+                            codeResource.LocalsCount = 1;
+                            UndertaleCodeLocals.CreateEmptyEntry(Data, codeResource.Name);
+                        }
+                        else
+                        {
+                            codeResource.WeirdLocalFlag = true;
+                        }
+                    }
+                    else if (obj is UndertaleExtension && IsExtProductIDEligible)
+                    {
+                        var newProductID = new byte[] { 0xBA, 0x5E, 0xBA, 0x11, 0xBA, 0xDD, 0x06, 0x60, 0xBE, 0xEF, 0xED, 0xBA, 0x0B, 0xAB, 0xBA, 0xBE };
+                        Data.FORM.EXTN.productIdData.Add(newProductID);
+                    }
+                    else if (obj is UndertaleShader shader)
+                    {
+                        shader.GLSL_ES_Vertex = Data.Strings.MakeString("", true);
+                        shader.GLSL_ES_Fragment = Data.Strings.MakeString("", true);
+                        shader.GLSL_Vertex = Data.Strings.MakeString("", true);
+                        shader.GLSL_Fragment = Data.Strings.MakeString("", true);
+                        shader.HLSL9_Vertex = Data.Strings.MakeString("", true);
+                        shader.HLSL9_Fragment = Data.Strings.MakeString("", true);
+                    }
+                }
+                else
+                {
+                    namedResource.Name = new UndertaleString(notDataNewName); // not Data.MakeString!
+                }
+            }
+            else if (obj is UndertaleString str)
+            {
+                str.Content = "string" + list.Count;
+            }
+
+            list.Add(obj);
+
+            if (Project is not null && obj is IProjectAsset projectAsset)
+                Project.MarkAssetForExport(projectAsset);
+
+            BuildTree(SearchBox?.Text);
+            Highlighted = obj;
+            OpenInTab(obj, true);
         }
 
         /// <summary>copies a resource's name to the clipboard (1:1 with the wpf copy-name action).</summary>

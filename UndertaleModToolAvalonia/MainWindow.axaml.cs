@@ -311,7 +311,7 @@ namespace UndertaleModTool
                 IEnumerable shown = hasFilter
                     ? items.Cast<object>().Where(o => MatchesFilter(o, trimmed)).ToList()
                     : items;
-                nodes.Add(new TreeCategory(name, shown));
+                nodes.Add(new TreeCategory(name, shown, items as IList));
             }
 
             Add("Audio Groups", Data.AudioGroups);
@@ -348,11 +348,14 @@ namespace UndertaleModTool
     {
         public string Name { get; }
         public IEnumerable Items { get; }
+        /// <summary>the real backing data list (unfiltered), used by "Add"; <see cref="Items"/> may be a filtered copy.</summary>
+        public IList Source { get; }
 
-        public TreeCategory(string name, IEnumerable items)
+        public TreeCategory(string name, IEnumerable items, IList source)
         {
             Name = name;
             Items = items;
+            Source = source;
         }
     }
 
