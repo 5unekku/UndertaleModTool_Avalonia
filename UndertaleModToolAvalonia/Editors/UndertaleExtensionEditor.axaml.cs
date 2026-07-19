@@ -35,17 +35,28 @@ namespace UndertaleModTool
         {
             get
             {
+                // MyIndex is -1 whenever the DataContext isn't an extension (e.g. during tab teardown, when the
+                // editor's DataContext is cleared). the DataContextChanged handler below evaluates this getter
+                // eagerly, so it must never index with -1 or past the end, or it throws and poisons the tab host.
+                int index = MyIndex;
+                if (index < 0)
+                    return null;
                 if (mainWindow.Data?.GeneralInfo is UndertaleGeneralInfo generalInfo &&
                     (generalInfo.Major >= 2 ||
                     (generalInfo.Major == 1 && (generalInfo.Build >= 1773 || generalInfo.Build == 1539))))
                 {
-                    return mainWindow.Data.FORM.EXTN.productIdData[MyIndex];
+                    var list = mainWindow.Data.FORM?.EXTN?.productIdData;
+                    if (list is not null && index < list.Count)
+                        return list[index];
                 }
                 return null;
             }
             set
             {
-                mainWindow.Data.FORM.EXTN.productIdData[MyIndex] = value;
+                int index = MyIndex;
+                var list = mainWindow.Data?.FORM?.EXTN?.productIdData;
+                if (index >= 0 && list is not null && index < list.Count)
+                    list[index] = value;
             }
         }
 

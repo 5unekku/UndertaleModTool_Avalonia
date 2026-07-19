@@ -38,6 +38,12 @@ namespace UndertaleModTool
             Instance = this;
             InitializeComponent();
 
+            // editors bind visibility etc. to MainWindow properties via
+            // {Binding DataContext.IsGMS2, RelativeSource=... AncestorType=MainWindow}, so the window's own
+            // DataContext must be itself (1:1 with wpf's `this.DataContext = this`). without it those bindings
+            // resolve against a null DataContext and GMS2-only fields never show/hide correctly.
+            DataContext = this;
+
             EditorTabs.ItemsSource = Tabs;
             OpenInTab(new DescriptionView("Welcome to UndertaleModTool!",
                 "Open a data.win file to get started, then click items on the left to view them."), true, "Welcome!");
