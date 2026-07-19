@@ -91,7 +91,7 @@ namespace UndertaleModTool
         {
             Data = UndertaleData.CreateNew();
             FilePath = null;
-            Dispatcher.UIThread.Post(BuildTree);
+            Dispatcher.UIThread.Post(() => BuildTree());
             return true;
         }
 

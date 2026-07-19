@@ -65,8 +65,26 @@
 
         <Grid ColumnDefinitions="320,4,*">
             <DockPanel Grid.Column="0">
-                <TextBox DockPanel.Dock="Top" x:Name="SearchBox" Watermark="Search..." Margin="2" />
+                <TextBox DockPanel.Dock="Top" x:Name="SearchBox" Watermark="Search..." Margin="2"
+                         TextChanged="SearchBox_TextChanged" />
                 <TreeView x:Name="ResourceTree" SelectionChanged="ResourceTree_SelectionChanged">
+                    <!-- virtualize both levels: categories like Strings/Code can hold tens of thousands of
+                         entries, and the default (non-virtualizing) StackPanel would realize every container
+                         at once on expand, freezing the ui (matches wpf's VirtualizingStackPanel.IsVirtualizing). -->
+                    <TreeView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel />
+                        </ItemsPanelTemplate>
+                    </TreeView.ItemsPanel>
+                    <TreeView.Styles>
+                        <Style Selector="TreeViewItem">
+                            <Setter Property="ItemsPanel">
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel />
+                                </ItemsPanelTemplate>
+                            </Setter>
+                        </Style>
+                    </TreeView.Styles>
                     <TreeView.DataTemplates>
                         <TreeDataTemplate DataType="local:TreeCategory" ItemsSource="{Binding Items}">
                             <TextBlock Text="{Binding Name}" FontWeight="Bold" />

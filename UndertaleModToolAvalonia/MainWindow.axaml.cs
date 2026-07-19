@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using Avalonia;
 using System.Threading.Tasks;
 using Avalonia.Controls;
@@ -252,14 +253,35 @@ namespace UndertaleModTool
             ChangeSelection(selected);
         }
 
-        // builds the resource tree categories from the loaded data (a flat-but-grouped view; the wpf tree is richer)
-        private void BuildTree()
+        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (Data is not null)
+                BuildTree((sender as TextBox)?.Text);
+        }
+
+        // whether a resource matches the tree search box (by name, case-insensitive; mirrors wpf's name filter)
+        private static bool MatchesFilter(object item, string filter)
+        {
+            string text = item?.ToString();
+            return text is not null && text.Contains(filter, StringComparison.OrdinalIgnoreCase);
+        }
+
+        // builds the resource tree categories from the loaded data (a flat-but-grouped view; the wpf tree is richer).
+        // an optional filter narrows each category to items whose name contains the text (wpf's FilteredViewConverter).
+        private void BuildTree(string filter = null)
+        {
+            bool hasFilter = !string.IsNullOrWhiteSpace(filter);
+            string trimmed = filter?.Trim();
+
             var categories = new List<TreeCategory>();
             void Add(string name, IEnumerable items)
             {
-                if (items is not null)
-                    categories.Add(new TreeCategory(name, items));
+                if (items is null)
+                    return;
+                IEnumerable shown = hasFilter
+                    ? items.Cast<object>().Where(o => MatchesFilter(o, trimmed)).ToList()
+                    : items;
+                categories.Add(new TreeCategory(name, shown));
             }
 
             Add("Audio Groups", Data.AudioGroups);
