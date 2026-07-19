@@ -22,8 +22,10 @@ namespace UndertaleModTool
             bool ctrl = e.KeyModifiers.HasFlag(KeyModifiers.Control);
             bool shift = e.KeyModifiers.HasFlag(KeyModifiers.Shift);
 
-            if (ctrl && !shift && e.Key == Key.O) { Open_Click(this, new RoutedEventArgs()); e.Handled = true; }
+            if (ctrl && !shift && e.Key == Key.N) { New_Click(this, new RoutedEventArgs()); e.Handled = true; }
+            else if (ctrl && !shift && e.Key == Key.O) { Open_Click(this, new RoutedEventArgs()); e.Handled = true; }
             else if (ctrl && !shift && e.Key == Key.S) { Save_Click(this, new RoutedEventArgs()); e.Handled = true; }
+            else if (ctrl && !shift && e.Key == Key.Q) { Close(); e.Handled = true; }
             else if (ctrl && !shift && e.Key == Key.W) { if (CurrentTab is not null) CloseTab(CurrentTab); e.Handled = true; }
             else if (ctrl && shift && e.Key == Key.F) { SearchInCode_Click(this, new RoutedEventArgs()); e.Handled = true; }
 
