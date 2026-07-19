@@ -36,6 +36,21 @@
 
                 <TextBlock Text="Contents" FontWeight="Bold" Margin="3,10,3,3" />
                 <TreeView x:Name="RoomObjectsTree" MaxHeight="280" SelectionChanged="RoomObjectsTree_SelectionChanged" DoubleTapped="RoomObjectsTree_DoubleTapped">
+                    <!-- virtualize: a room's game-object layer can hold hundreds/thousands of instances -->
+                    <TreeView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel />
+                        </ItemsPanelTemplate>
+                    </TreeView.ItemsPanel>
+                    <TreeView.Styles>
+                        <Style Selector="TreeViewItem">
+                            <Setter Property="ItemsPanel">
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel />
+                                </ItemsPanelTemplate>
+                            </Setter>
+                        </Style>
+                    </TreeView.Styles>
                     <TreeView.DataTemplates>
                         <TreeDataTemplate DataType="local:RoomTreeGroup" ItemsSource="{Binding Items}">
                             <TextBlock Text="{Binding Name}" FontWeight="Bold" />
