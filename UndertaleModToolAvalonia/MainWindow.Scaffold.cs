@@ -59,16 +59,6 @@ namespace UndertaleModTool
             // TODO phase 9: real child-file open
         }
 
-        /// <summary>deletes a resource from the data file. (full implementation: phase 9)</summary>
-        internal void DeleteItem(UndertaleObject obj)
-        {
-            // TODO phase 9: real delete
-        }
-
-        /// <summary>copies a resource's name to the clipboard. (full implementation: phase 9)</summary>
-        internal void CopyItemName(object obj)
-        {
-            // TODO phase 9: real copy
-        }
+        // DeleteItem + CopyItemName are implemented in MainWindow.TreeOps.cs
     }
 }

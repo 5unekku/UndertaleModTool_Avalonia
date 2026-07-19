@@ -140,10 +140,16 @@ namespace UndertaleModTool
 
         private void CloseTab_Click(object sender, RoutedEventArgs e)
         {
-            if ((sender as Control)?.Tag is not Tab tab)
-                return;
+            if ((sender as Control)?.Tag is Tab tab)
+                CloseTab(tab);
+        }
 
+        /// <summary>closes a tab and selects a sensible neighbour (or the welcome tab when none remain).</summary>
+        internal void CloseTab(Tab tab)
+        {
             int index = Tabs.IndexOf(tab);
+            if (index < 0)
+                return;
             Tabs.Remove(tab);
             for (int i = 0; i < Tabs.Count; i++)
                 Tabs[i].TabIndex = i;
