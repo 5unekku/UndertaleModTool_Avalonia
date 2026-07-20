@@ -73,13 +73,6 @@ namespace UndertaleModTool
                 BuildTree();
         }
 
-        private async void RunScriptMenu_Click(object sender, Avalonia.Interactivity.RoutedEventArgs e)
-        {
-            var dlg = new OpenFileDialog { DefaultExt = ".csx", Filter = "Scripts (.csx)|*.csx|All files|*" };
-            if (dlg.ShowDialog(this) == true)
-                await RunScript(dlg.FileName);
-        }
-
         private void SetStatus(string text)
         {
             Dispatcher.UIThread.Post(() => { if (StatusBar is not null) StatusBar.Text = text; });
