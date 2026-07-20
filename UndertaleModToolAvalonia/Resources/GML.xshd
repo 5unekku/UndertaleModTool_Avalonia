@@ -5,6 +5,8 @@
     <Color name="Identifier" foreground="#B2B1FF" />
     <Color name="AltIdentifier" foreground="#FFF899" />
     <Color name="Function" foreground="#B2B1FF" />
+    <Color name="InternalFunction" foreground="#B2B1FF" />
+    <Color name="TemplateStringField" foreground="#C0C0C0" />
     <Color name="Number" foreground="#FF6464" />
 
     <!-- This is the main ruleset. -->
@@ -27,6 +29,17 @@
             <RuleSet>
                 <!-- nested span for escape sequences -->
                 <Span begin="\\" end="." />
+            </RuleSet>
+        </Span>
+
+        <Span color="String">
+            <Begin>\$"</Begin>
+            <End>"</End>
+            <RuleSet>
+                <!-- nested span for escape sequences -->
+                <Span begin="\\" end="." />
+                <!-- use main ruleset for template string fields -->
+                <Span begin="{" end="}" color="TemplateStringField" ruleSet="" />
             </RuleSet>
         </Span>
 
@@ -100,6 +113,11 @@
         <!-- Function calls -->
         <Rule color="Function">
             [_a-zA-Z][_a-zA-Z0-9]*(?=\()
+        </Rule>
+
+        <!-- Internal function calls -->
+        <Rule color="InternalFunction">
+            @+[_a-zA-Z][_a-zA-Z0-9]*@+(?=\()
         </Rule>
 
         <!-- Normal identifiers -->

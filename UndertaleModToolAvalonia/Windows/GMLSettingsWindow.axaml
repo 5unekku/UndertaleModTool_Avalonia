@@ -71,6 +71,9 @@
                     <CheckBox Grid.Row="1" Grid.Column="0" Margin="3" Content="Default argument values" IsChecked="{Binding DecompilerSettings.CleanupDefaultArgumentValues}" />
                     <CheckBox Grid.Row="1" Grid.Column="1" Margin="3" Content="Builtin array variable syntax" IsChecked="{Binding DecompilerSettings.CleanupBuiltinArrayVariables}" />
                     <CheckBox Grid.Row="2" Grid.Column="0" Margin="3" Content="Scope local variable declarations" IsChecked="{Binding DecompilerSettings.CleanupLocalVarDeclarations}" />
+                    <CheckBox Grid.Row="2" Grid.Column="1" Margin="3" Content="Template strings"
+                              ToolTip.Tip="If enabled, the decompiler will attempt to rewrite string()/@@string@@() as template strings."
+                              IsChecked="{Binding DecompilerSettings.CleanupTemplateStrings}" />
                 </Grid>
             </Grid>
 

@@ -7,6 +7,7 @@
     <Color name="BranchOpcode" foreground="#80A8FF" />
     <Color name="Opcode" foreground="#DADADA" />
     <Color name="Function" foreground="#FFB871" fontWeight="bold" />
+    <Color name="InternalFunction" foreground="#FFB871" fontWeight="bold" />
     <Color name="Number" foreground="#FF6464" />
     <Color name="Label" foreground="#FF8D0A" />
 
@@ -74,7 +75,12 @@
 
         <!-- Function calls -->
         <Rule color="Function">
-            [_a-zA-Z][_a-zA-Z0-9]*(?=\()
+            [_a-zA-Z@][_a-zA-Z0-9@]*(?=\()
+        </Rule>
+
+        <!-- Internal function calls -->
+        <Rule color="InternalFunction">
+            @+[_a-zA-Z][_a-zA-Z0-9]*@+(?=\()
         </Rule>
 
         <!-- Opcodes -->
