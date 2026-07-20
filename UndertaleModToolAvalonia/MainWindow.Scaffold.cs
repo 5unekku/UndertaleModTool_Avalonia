@@ -77,12 +77,7 @@ namespace UndertaleModTool
             return false;
         }
 
-        /// <summary>opens a child data file at a specific chunk/item. (full implementation: phase 9)</summary>
-        public void OpenChildFile(string filename, string chunkName, int itemIndex)
-        {
-            // TODO phase 9: real child-file open
-        }
-
+        // OpenChildFile / CloseChildFiles / ListenChildConnection are implemented in MainWindow.ChildFiles.cs
         // DeleteItem + CopyItemName are implemented in MainWindow.TreeOps.cs
     }
 }

@@ -33,7 +33,9 @@ namespace UndertaleModTool
         /// <summary>the currently active tab.</summary>
         public Tab CurrentTab { get; set; }
 
-        public MainWindow()
+        public MainWindow() : this(null) { }
+
+        public MainWindow(string[] startupArgs)
         {
             Instance = this;
             InitializeComponent();
@@ -55,6 +57,19 @@ namespace UndertaleModTool
             {
                 try { FileAssociations.CreateAssociations(); } catch { }
             }
+
+            // process startup args once the window is up (open a passed file; connect a child-file pipe)
+            if (startupArgs is { Length: > 0 })
+                Opened += async (_, _) => await ProcessStartupArgs(startupArgs);
+        }
+
+        // handles command-line args passed to the gui: [dataFile] or [dataFile, childPipeKey] (child-file launch).
+        private async Task ProcessStartupArgs(string[] args)
+        {
+            if (args.Length >= 1 && File.Exists(args[0]))
+                await LoadFile(args[0]);
+            if (args.Length >= 2)
+                _ = ListenChildConnection(args[1]);
         }
 
         // restores the saved cross-platform window position/size (replaces the wpf Win32 WINDOWPLACEMENT handling)
@@ -93,6 +108,7 @@ namespace UndertaleModTool
                 }
                 Settings.Save();
             }
+            CloseChildFiles();
             base.OnClosing(e);
         }
 
@@ -197,6 +213,7 @@ namespace UndertaleModTool
         /// <summary>loads a data file into the window, rebuilding the tree; returns whether the load succeeded.</summary>
         internal async Task<bool> LoadFile(string path)
         {
+            CloseChildFiles();
             StatusBar.Text = "Loading " + path + " ...";
             try
             {
