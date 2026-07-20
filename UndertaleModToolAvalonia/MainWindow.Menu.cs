@@ -1,8 +1,11 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Avalonia.Interactivity;
+using UndertaleModLib;
 
 namespace UndertaleModTool
 {
@@ -37,6 +40,43 @@ namespace UndertaleModTool
             {
                 dialog?.Close();
             }
+        }
+
+        // dumps the byte-offset -> object map of a chosen data file to a text file (debug aid). 1:1 with wpf.
+        private async void OffsetMap_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new OpenFileDialog { DefaultExt = "win", Filter = "GameMaker main data files (.win, .unx, .ios, .droid)|*.win;*.unx;*.ios;*.droid|All files|*" };
+            if (dlg.ShowDialog(this) != true)
+                return;
+
+            var dlgout = new SaveFileDialog
+            {
+                DefaultExt = "txt",
+                Filter = "Text files (.txt)|*.txt|All files|*",
+                FileName = dlg.FileName + ".offsetmap.txt"
+            };
+            if (dlgout.ShowDialog(this) != true)
+                return;
+
+            var dialog = new LoaderDialog("Generating", "Loading, please wait...");
+            Task t = Task.Run(() =>
+            {
+                try
+                {
+                    using var stream = new FileStream(dlg.FileName, FileMode.Open, FileAccess.Read);
+                    var offsets = UndertaleIO.GenerateOffsetMap(stream);
+                    using var writer = File.CreateText(dlgout.FileName);
+                    foreach (var off in offsets.OrderBy(x => x.Key))
+                        writer.WriteLine(off.Key.ToString("X8") + " " + off.Value.ToString().Replace("\n", "\\\n"));
+                }
+                catch (Exception ex)
+                {
+                    this.ShowError("An error occurred while trying to load:\n" + ex.Message, "Load error");
+                }
+                dialog.TryClose();
+            });
+            dialog.ShowDialogSync(this);
+            await t;
         }
 
         /// <summary>opens a url in the system browser (cross-platform; 1:1 with the wpf helper).</summary>

@@ -55,6 +55,8 @@
                 <MenuItem Header="Run game under GMS _debugger" Click="RunDebug_Click" InputGesture="Shift+F5" />
                 <MenuItem Header="Run game with other runner" Click="RunSpecial_Click" InputGesture="Alt+F5" />
                 <Separator />
+                <MenuItem Header="Generate o_ffset map" Click="OffsetMap_Click" />
+                <Separator />
                 <MenuItem Header="S_ettings" Click="Settings_Click" />
                 <MenuItem Header="_Close" Click="Exit_Click" InputGesture="Ctrl+Q" />
             </MenuItem>
