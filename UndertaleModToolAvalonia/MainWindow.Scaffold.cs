@@ -5,10 +5,9 @@ using UndertaleModLib.Project;
 
 namespace UndertaleModTool
 {
-    // the public api surface of the main window that editors and controls bind to / call into. the navigation
-    // and save plumbing is stubbed here and gets its real implementation when the main window is ported (phase 9).
-    // note: change notification for the main window's own properties is handled in phase 9 (avalonia's
-    // AvaloniaObject already owns a PropertyChanged event, so INotifyPropertyChanged needs care here).
+    // the public api surface of the main window that editors and controls bind to / call into.
+    // note: MainWindow is an AvaloniaObject (which already owns a PropertyChanged event), so rather than
+    // implementing INotifyPropertyChanged for menu greying etc., state changes call UpdateMenuStates() imperatively.
     public partial class MainWindow
     {
         /// <summary>the application version string.</summary>

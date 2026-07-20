@@ -13,9 +13,9 @@ using UndertaleModLib.Project;
 
 namespace UndertaleModTool
 {
-    // resource-tree operations and keyboard shortcuts (a lean subset of the wpf MainWindow input bindings +
-    // tree context menu). "Add" is intentionally not ported yet: creating a resource needs faithful per-type
-    // initialization (room GMS2 flags/room-order, script code entries, etc.) or it produces broken assets.
+    // resource-tree operations and keyboard shortcuts: the wpf MainWindow input bindings, the tree context menu
+    // (Add / open / copy-name / delete), delete, and drag&drop reorder. Add does the faithful per-type
+    // initialization (room GMS2 flags/room-order, script code entries, etc.) that the wpf MenuItem_Add_Click does.
     public partial class MainWindow
     {
         // keyboard shortcuts: Ctrl+O open, Ctrl+S save, Ctrl+W close tab, Ctrl+Shift+F search in code
