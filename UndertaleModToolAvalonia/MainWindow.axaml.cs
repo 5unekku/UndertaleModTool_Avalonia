@@ -61,6 +61,9 @@ namespace UndertaleModTool
 
             UpdateMenuStates();
 
+            // the GMS-debugger run option is hidden unless explicitly enabled in settings (1:1 with wpf)
+            MenuRunDebug.IsVisible = Settings.Instance?.ShowDebuggerOption == true;
+
             // resource-tree reorder drag&drop (drag a resource onto a same-type sibling to swap them)
             DragDrop.SetAllowDrop(ResourceTree, true);
             ResourceTree.AddHandler(DragDrop.DragOverEvent, ResourceTree_DragOver);
