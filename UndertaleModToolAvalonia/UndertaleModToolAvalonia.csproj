@@ -38,6 +38,9 @@
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.13" />
         <PackageReference Include="Avalonia.Diagnostics" Version="11.3.13" Condition="'$(Configuration)' == 'Debug'" />
         <PackageReference Include="Avalonia.AvaloniaEdit" Version="11.3.0" />
+        <!-- override avalonia's vulnerable transitive Tmds.DBus.Protocol 0.21.2 (NU1903 GHSA-xrw6-gwf8-vvr9);
+             0.21.3 is the patch on the same 0.21.x line, so api-compatible with Avalonia.FreeDesktop 11.3.13 -->
+        <PackageReference Include="Tmds.DBus.Protocol" Version="0.21.3" />
         <!-- note: no PropertyChanged.Fody here. avalonia's AvaloniaObject already implements INotifyPropertyChanged,
              so fody would try (and fail) to weave every control. gui change-notification is done manually instead;
              the data models keep their notifications from UndertaleModLib's own fody weaving. -->
