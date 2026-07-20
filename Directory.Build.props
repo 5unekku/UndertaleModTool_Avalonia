@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <!-- .NET 10 added restore-time package pruning (dropping transitive packages already provided
+         by the shared framework). early 10.0.1xx sdks ship without prune data for
+         Microsoft.NETCore.App 10.0 and fail restore with NETSDK1226 instead of just skipping.
+         let the build proceed on those sdks; pruning simply no-ops when the data is absent, and
+         the property is harmless (ignored) on newer sdks that do have the data. -->
+    <AllowMissingPrunePackageData>true</AllowMissingPrunePackageData>
+  </PropertyGroup>
+</Project>
