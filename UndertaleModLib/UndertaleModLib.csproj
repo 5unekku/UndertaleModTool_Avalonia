@@ -20,7 +20,10 @@
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <!-- only pack-on-build for plain (non-RID) builds; a RID publish (e.g. the aur package's
+         `dotnet publish -r linux-x64`) would otherwise run Pack's non-RID inner build concurrently
+         with the RID build, and both write the same .nupkg -> file-lock error -->
+    <GeneratePackageOnBuild Condition="'$(RuntimeIdentifier)' == ''">true</GeneratePackageOnBuild>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
