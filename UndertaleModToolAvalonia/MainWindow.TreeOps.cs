@@ -27,6 +27,10 @@ namespace UndertaleModTool
             else if (ctrl && !shift && e.Key == Key.S) { Save_Click(this, new RoutedEventArgs()); e.Handled = true; }
             else if (ctrl && !shift && e.Key == Key.Q) { Close(); e.Handled = true; }
             else if (ctrl && !shift && e.Key == Key.W) { if (CurrentTab is not null) CloseTab(CurrentTab); e.Handled = true; }
+            else if (ctrl && shift && e.Key == Key.W) { CloseAllTabs(); e.Handled = true; }
+            else if (ctrl && shift && e.Key == Key.T) { RestoreClosedTab(); e.Handled = true; }
+            else if (ctrl && !shift && e.Key == Key.Tab) { SwitchTab(1); e.Handled = true; }
+            else if (ctrl && shift && e.Key == Key.Tab) { SwitchTab(-1); e.Handled = true; }
             else if (ctrl && shift && e.Key == Key.F) { SearchInCode_Click(this, new RoutedEventArgs()); e.Handled = true; }
 
             if (!e.Handled)

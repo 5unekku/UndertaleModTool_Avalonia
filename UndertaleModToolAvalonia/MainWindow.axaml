@@ -109,6 +109,13 @@
                 <TabControl.ItemTemplate>
                     <DataTemplate DataType="local:Tab">
                         <StackPanel Orientation="Horizontal" Spacing="6">
+                            <StackPanel.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Close" Click="CloseTabMenuItem_Click" InputGesture="Ctrl+W" />
+                                    <MenuItem Header="Close other tabs" Click="CloseOtherTabsMenuItem_Click" />
+                                    <MenuItem Header="Close all tabs" Click="CloseAllTabsMenuItem_Click" InputGesture="Ctrl+Shift+W" />
+                                </ContextMenu>
+                            </StackPanel.ContextMenu>
                             <TextBlock Text="{Binding TabTitle}" VerticalAlignment="Center" />
                             <Button Content="✕" Padding="4,0" FontSize="10" Click="CloseTab_Click" Tag="{Binding}" />
                         </StackPanel>

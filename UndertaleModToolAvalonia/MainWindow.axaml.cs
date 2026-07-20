@@ -150,6 +150,11 @@ namespace UndertaleModTool
             int index = Tabs.IndexOf(tab);
             if (index < 0)
                 return;
+
+            // remember closed resource tabs so Ctrl+Shift+T can reopen them (skip the welcome/description tab)
+            if (tab.CurrentObject is not DescriptionView)
+                ClosedTabsHistory.Add(tab);
+
             Tabs.Remove(tab);
             for (int i = 0; i < Tabs.Count; i++)
                 Tabs[i].TabIndex = i;
