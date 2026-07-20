@@ -115,6 +115,8 @@ namespace UndertaleModTool
             {
                 CurrentTab.NavigateTo(obj);
             }
+
+            UpdateObjectLabel(obj);
         }
 
         /// <summary>whether the editor host has an editor/viewer template for the given asset.</summary>
@@ -135,6 +137,7 @@ namespace UndertaleModTool
             {
                 CurrentTab = tab;
                 Highlighted = tab.CurrentObject;
+                UpdateObjectLabel(tab.CurrentObject);
             }
         }
 
@@ -188,9 +191,13 @@ namespace UndertaleModTool
             if (dlg.ShowDialog(this) != true)
                 return;
 
-            string path = dlg.FileName;
-            StatusBar.Text = "Loading " + path + " ...";
+            await LoadFile(dlg.FileName);
+        }
 
+        /// <summary>loads a data file into the window, rebuilding the tree; returns whether the load succeeded.</summary>
+        internal async Task<bool> LoadFile(string path)
+        {
+            StatusBar.Text = "Loading " + path + " ...";
             try
             {
                 UndertaleData data = await Task.Run(() =>
@@ -207,11 +214,13 @@ namespace UndertaleModTool
                 StatusBar.Text = $"Loaded {Path.GetFileName(path)}";
                 ChangeSelection(new DescriptionView(Path.GetFileName(path),
                     "Data file loaded. Select a resource on the left to edit it."));
+                return true;
             }
             catch (Exception ex)
             {
                 this.ShowError("Failed to load data file:\n" + ex.Message, "Load failed");
                 StatusBar.Text = "Load failed.";
+                return false;
             }
         }
 

@@ -61,13 +61,32 @@
                 <MenuItem Header="_Search in code" Click="SearchInCode_Click" InputGesture="Ctrl+Shift+F" />
                 <MenuItem Header="Find unreferenced _assets" Click="FindUnreferencedAssets_Click" />
             </MenuItem>
+            <MenuItem Header="_Project">
+                <MenuItem Header="_New project" Click="NewProject_Click" />
+                <MenuItem Header="_Open project" Click="OpenProject_Click" />
+                <MenuItem Header="_Save project" Click="SaveProject_Click" />
+                <MenuItem Header="_View unexported assets" Click="ViewProjectAssets_Click" />
+                <MenuItem Header="_Close project" Click="CloseProject_Click" />
+            </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="_GitHub" Click="GitHub_Click" />
                 <MenuItem Header="_About" Click="About_Click" />
             </MenuItem>
         </Menu>
 
-        <TextBlock DockPanel.Dock="Bottom" x:Name="StatusBar" Margin="4,2" Text="No data file loaded." />
+        <Grid DockPanel.Dock="Bottom" Margin="4,2" ColumnDefinitions="*,Auto,Auto">
+            <TextBlock Grid.Column="0" x:Name="StatusBar" VerticalAlignment="Center" Text="No data file loaded." />
+            <!-- marked-for-export toggle for the current asset (only shown when a project is open) -->
+            <StackPanel Grid.Column="1" x:Name="MarkedForExportGroup" IsVisible="False"
+                        Orientation="Horizontal" Spacing="6" Margin="0,0,20,0" VerticalAlignment="Center"
+                        ToolTip.Tip="Whether the currently open asset is marked to be exported to the currently open project, the next time it is saved.">
+                <TextBlock Text="Marked for export:" VerticalAlignment="Center" />
+                <CheckBox x:Name="MarkedForExportCheckBox" VerticalAlignment="Center"
+                          IsCheckedChanged="MarkedForExport_CheckBoxChanged" />
+            </StackPanel>
+            <TextBlock Grid.Column="2" x:Name="ObjectLabel" VerticalAlignment="Center" Text="None"
+                       ToolTip.Tip="This is an ID (index) of the currently open asset, item, or object. It starts from 0." />
+        </Grid>
 
         <Grid ColumnDefinitions="320,4,*">
             <DockPanel Grid.Column="0">
