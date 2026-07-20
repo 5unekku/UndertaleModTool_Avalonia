@@ -17,8 +17,10 @@
         <!-- the avalonia port keeps the UndertaleModTool namespace, so it shares the same root namespace -->
         <RootNamespace>UndertaleModTool</RootNamespace>
         <AssemblyName>UndertaleModTool</AssemblyName>
-        <!-- suppress all missing xml comment warnings -->
-        <NoWarn>1591</NoWarn>
+        <!-- 1591: missing xml comment. AVLN3001: xaml resource not reachable via the runtime loader (no public
+             parameterless ctor); all our windows/controls take required ctor args and are instantiated from code,
+             never loaded by uri, so this is expected. -->
+        <NoWarn>1591;AVLN3001</NoWarn>
     </PropertyGroup>
     <ItemGroup>
         <AvaloniaResource Include="Resources\**" />

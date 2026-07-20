@@ -107,6 +107,9 @@ namespace UndertaleModTool
         private void MenuItemOpenInNewTab_Click(object sender, RoutedEventArgs e) => OpenSelectedListViewItem(true);
         private void MenuItemUnmarkForExport_Click(object sender, RoutedEventArgs e) => UnmarkSelectedListViewItemsForExport();
 
+        // ponytail: obsolete IDataObject retained on purpose, see UndertaleObjectReference.GetDragObject
+        // (new DataTransfer custom formats are byte[]/string only; this is an in-process live-object drag)
+#pragma warning disable CS0618
         private static IProjectAsset GetDraggedAsset(DragEventArgs e)
         {
             var formats = e.Data.GetDataFormats().ToArray();
@@ -114,6 +117,7 @@ namespace UndertaleModTool
                 return null;
             return e.Data.Get(formats[^1]) as IProjectAsset;
         }
+#pragma warning restore CS0618
 
         private void Grid_DragOver(object sender, DragEventArgs e)
         {

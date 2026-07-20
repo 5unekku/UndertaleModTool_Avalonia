@@ -56,6 +56,9 @@ namespace UndertaleModTool
             if (Highlighted is not UndertaleObject draggedItem)
                 return;
 
+            // ponytail: obsolete DataObject/DoDragDrop retained on purpose, see UndertaleObjectReference.GetDragObject
+            // (new DataTransfer custom formats are byte[]/string only; this is an in-process live-object drag)
+#pragma warning disable CS0618
             var data = new DataObject();
             data.Set(UndertaleObjectReference.DragFormat, draggedItem);
 
@@ -72,6 +75,7 @@ namespace UndertaleModTool
             {
                 _treeDragActive = false;
             }
+#pragma warning restore CS0618
         }
 
         // allow a same-type resource to be dropped onto another (a reorder swap) when the setting permits it

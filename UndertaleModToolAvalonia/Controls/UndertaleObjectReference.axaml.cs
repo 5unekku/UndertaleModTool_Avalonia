@@ -284,6 +284,10 @@ namespace UndertaleModTool
             e.Handled = true;
         }
 
+        // ponytail: avalonia 11.3 deprecates IDataObject (DragEventArgs.Data) for the new DataTransfer, but
+        // DataTransfer's custom formats are byte[]/string only; this drag carries a live in-process
+        // UndertaleObject reference, which the new api can't hold without serializing it. keep the working api.
+#pragma warning disable CS0618
         internal static UndertaleObject GetDragObject(DragEventArgs e)
         {
             if (e.Data.Contains(DragFormat))
@@ -295,5 +299,6 @@ namespace UndertaleModTool
             }
             return null;
         }
+#pragma warning restore CS0618
     }
 }

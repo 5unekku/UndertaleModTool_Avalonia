@@ -890,7 +890,7 @@ public partial class Program : IScriptInterface
     /// Builds a filesystem-safe file name for a dumped code entry. Most entry names are short and
     /// used verbatim; GameMaker's nested-anonymous-function names can exceed the OS per-component
     /// limit (NAME_MAX = 255 bytes on Linux: ext4, btrfs, etc.), which makes
-    /// <see cref="File.WriteAllText"/> throw ENAMETOOLONG. Such names are shortened deterministically
+    /// <see cref="File.WriteAllText(string, string)"/> throw ENAMETOOLONG. Such names are shortened deterministically
     /// to a readable prefix plus a short content hash for uniqueness, keeping the ".gml" extension.
     /// Short names are unchanged.
     /// </summary>
