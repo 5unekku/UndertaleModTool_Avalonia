@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -38,6 +40,73 @@ namespace UndertaleModTool
 
             if (!e.Handled)
                 base.OnKeyDown(e);
+        }
+
+        // guards against re-entering DoDragDrop while a tree drag is already in flight (PointerMoved fires often)
+        private bool _treeDragActive = false;
+
+        // drag source: dragging the highlighted resource out of the tree (feeds reference fields, the project
+        // assets window, and the reorder-swap drop below). 1:1 with the wpf TreeView_MouseMove.
+        private async void ResourceTree_PointerMoved(object sender, PointerEventArgs e)
+        {
+            if (_treeDragActive)
+                return;
+            if (!e.GetCurrentPoint(ResourceTree).Properties.IsLeftButtonPressed)
+                return;
+            if (Highlighted is not UndertaleObject draggedItem)
+                return;
+
+            var data = new DataObject();
+            data.Set(UndertaleObjectReference.DragFormat, draggedItem);
+
+            _treeDragActive = true;
+            try
+            {
+                await DragDrop.DoDragDrop(e, data, DragDropEffects.Move | DragDropEffects.Link);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error on handling \"ResourceTree\" drag&drop:\n{ex}");
+            }
+            finally
+            {
+                _treeDragActive = false;
+            }
+        }
+
+        // allow a same-type resource to be dropped onto another (a reorder swap) when the setting permits it
+        private void ResourceTree_DragOver(object sender, DragEventArgs e)
+        {
+            UndertaleObject sourceItem = UndertaleObjectReference.GetDragObject(e);
+            UndertaleObject targetItem = (e.Source as Control)?.DataContext as UndertaleObject;
+
+            e.DragEffects = e.DragEffects.HasFlag(DragDropEffects.Move) && sourceItem is not null && targetItem is not null
+                            && sourceItem != targetItem && sourceItem.GetType() == targetItem.GetType()
+                                ? DragDropEffects.Move : DragDropEffects.None;
+            e.Handled = true;
+        }
+
+        private void ResourceTree_Drop(object sender, DragEventArgs e)
+        {
+            UndertaleObject sourceItem = UndertaleObjectReference.GetDragObject(e);
+            UndertaleObject targetItem = (e.Source as Control)?.DataContext as UndertaleObject;
+
+            bool valid = e.DragEffects.HasFlag(DragDropEffects.Move) && sourceItem is not null && targetItem is not null
+                         && sourceItem != targetItem && sourceItem.GetType() == targetItem.GetType()
+                         && Settings.Instance.AssetOrderSwappingEnabled;
+            if (valid)
+            {
+                IList list = Data[sourceItem.GetType()];
+                int sourceIndex = list.IndexOf(sourceItem);
+                int targetIndex = list.IndexOf(targetItem);
+                if (sourceIndex >= 0 && targetIndex >= 0)
+                {
+                    list[sourceIndex] = targetItem;
+                    list[targetIndex] = sourceItem;
+                    BuildTree(SearchBox?.Text);
+                }
+            }
+            e.Handled = true;
         }
 
         // delete key on the tree removes the selected resource (same guarded confirm as the context menu)

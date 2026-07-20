@@ -99,7 +99,8 @@
                 <TextBox DockPanel.Dock="Top" x:Name="SearchBox" Watermark="Search..." Margin="2"
                          TextChanged="SearchBox_TextChanged" />
                 <TreeView x:Name="ResourceTree" SelectionChanged="ResourceTree_SelectionChanged"
-                          KeyDown="ResourceTree_KeyDown" ContextRequested="ResourceTree_ContextRequested">
+                          KeyDown="ResourceTree_KeyDown" ContextRequested="ResourceTree_ContextRequested"
+                          PointerMoved="ResourceTree_PointerMoved">
                     <!-- virtualize both levels: categories like Strings/Code can hold tens of thousands of
                          entries, and the default (non-virtualizing) StackPanel would realize every container
                          at once on expand, freezing the ui (matches wpf's VirtualizingStackPanel.IsVirtualizing). -->

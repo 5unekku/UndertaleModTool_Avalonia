@@ -7,6 +7,7 @@ using System.Linq;
 using Avalonia;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media.Imaging;
@@ -59,6 +60,11 @@ namespace UndertaleModTool
             }
 
             UpdateMenuStates();
+
+            // resource-tree reorder drag&drop (drag a resource onto a same-type sibling to swap them)
+            DragDrop.SetAllowDrop(ResourceTree, true);
+            ResourceTree.AddHandler(DragDrop.DragOverEvent, ResourceTree_DragOver);
+            ResourceTree.AddHandler(DragDrop.DropEvent, ResourceTree_Drop);
 
             // process startup args once the window is up (open a passed file; connect a child-file pipe)
             if (startupArgs is { Length: > 0 })
