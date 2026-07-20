@@ -7,4 +7,14 @@
          the property is harmless (ignored) on newer sdks that do have the data. -->
     <AllowMissingPrunePackageData>true</AllowMissingPrunePackageData>
   </PropertyGroup>
+  <!-- packaging builds (the aur PKGBUILD passes -p:PackageBuild=true) emit no debug symbols. otherwise each
+       dll's PE debug directory embeds its .pdb's absolute build path, landing in the package as a $srcdir
+       reference (makepkg warns "Package contains reference to $srcdir"). gated on a custom flag rather than the
+       RID because the published managed dlls (Underanalyzer/UndertaleModCli) are the rid-agnostic net10.0
+       builds. every project imports this props file directly (incl. the Underanalyzer submodule), so the flag
+       reaches all of them. normal dev/debug builds keep full symbols. -->
+  <PropertyGroup Condition="'$(PackageBuild)' == 'true'">
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+  </PropertyGroup>
 </Project>
