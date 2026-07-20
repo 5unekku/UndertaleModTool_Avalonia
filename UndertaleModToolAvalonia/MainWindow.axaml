@@ -51,6 +51,10 @@
                 <MenuItem Header="_Open" Click="Open_Click" InputGesture="Ctrl+O" />
                 <MenuItem Header="_Save" Click="Save_Click" InputGesture="Ctrl+S" />
                 <Separator />
+                <MenuItem Header="_Temp run game" Click="Run_Click" InputGesture="F5" />
+                <MenuItem Header="Run game under GMS _debugger" Click="RunDebug_Click" InputGesture="Shift+F5" />
+                <MenuItem Header="Run game with other runner" Click="RunSpecial_Click" InputGesture="Alt+F5" />
+                <Separator />
                 <MenuItem Header="S_ettings" Click="Settings_Click" />
                 <MenuItem Header="_Close" Click="Exit_Click" InputGesture="Ctrl+Q" />
             </MenuItem>

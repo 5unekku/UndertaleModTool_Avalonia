@@ -240,7 +240,15 @@ namespace UndertaleModTool
             if (dlg.ShowDialog(this) != true)
                 return;
 
-            string path = dlg.FileName;
+            await SaveFile(dlg.FileName);
+        }
+
+        /// <summary>writes the current data to a path, updating FilePath on success; returns whether it succeeded.</summary>
+        internal async Task<bool> SaveFile(string path, bool _suppressDebug = false)
+        {
+            if (Data is null)
+                return false;
+
             StatusBar.Text = "Saving...";
             try
             {
@@ -251,11 +259,13 @@ namespace UndertaleModTool
                 });
                 FilePath = path;
                 StatusBar.Text = $"Saved {Path.GetFileName(path)}";
+                return true;
             }
             catch (Exception ex)
             {
                 this.ShowError("Failed to save data file:\n" + ex.Message, "Save failed");
                 StatusBar.Text = "Save failed.";
+                return false;
             }
         }
 

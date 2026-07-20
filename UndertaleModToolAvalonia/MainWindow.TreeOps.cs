@@ -32,6 +32,9 @@ namespace UndertaleModTool
             else if (ctrl && !shift && e.Key == Key.Tab) { SwitchTab(1); e.Handled = true; }
             else if (ctrl && shift && e.Key == Key.Tab) { SwitchTab(-1); e.Handled = true; }
             else if (ctrl && shift && e.Key == Key.F) { SearchInCode_Click(this, new RoutedEventArgs()); e.Handled = true; }
+            else if (!ctrl && !shift && e.Key == Key.F5) { Run_Click(this, new RoutedEventArgs()); e.Handled = true; }
+            else if (!ctrl && shift && e.Key == Key.F5) { RunDebug_Click(this, new RoutedEventArgs()); e.Handled = true; }
+            else if (!ctrl && e.KeyModifiers.HasFlag(KeyModifiers.Alt) && e.Key == Key.F5) { RunSpecial_Click(this, new RoutedEventArgs()); e.Handled = true; }
 
             if (!e.Handled)
                 base.OnKeyDown(e);

@@ -46,11 +46,35 @@ namespace UndertaleModTool
             OpenInTab(newsel, inNewTab);
         }
 
-        /// <summary>prompts to save the current data file. (full implementation: phase 9)</summary>
-        public Task<bool> DoSaveDialog(bool suppressDebug = false)
+        /// <summary>prompts to save the current data file (project save-file or a save dialog). 1:1 with wpf.</summary>
+        public async Task<bool> DoSaveDialog(bool suppressDebug = false)
         {
-            // TODO phase 9: real save dialog
-            return Task.FromResult(false);
+            if (Data is null)
+                return false;
+
+            // if a project is open, save to its designated data file
+            if (Project is not null)
+            {
+                if (this.ShowQuestionWithCancel("Save to the project's designated data file for saving?") == MessageBoxResult.Yes)
+                {
+                    await SaveFile(Project.SaveDataPath, suppressDebug);
+                    return true;
+                }
+                return false;
+            }
+
+            var dlg = new SaveFileDialog
+            {
+                DefaultExt = "win",
+                Filter = "GameMaker data files (.win, .unx, .ios, .droid)|*.win;*.unx;*.ios;*.droid|All files|*",
+                FileName = FilePath
+            };
+            if (dlg.ShowDialog(this) == true)
+            {
+                await SaveFile(dlg.FileName, suppressDebug);
+                return true;
+            }
+            return false;
         }
 
         /// <summary>opens a child data file at a specific chunk/item. (full implementation: phase 9)</summary>
