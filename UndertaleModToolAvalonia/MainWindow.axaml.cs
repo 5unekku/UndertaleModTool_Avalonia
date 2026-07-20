@@ -58,9 +58,24 @@ namespace UndertaleModTool
                 try { FileAssociations.CreateAssociations(); } catch { }
             }
 
+            UpdateMenuStates();
+
             // process startup args once the window is up (open a passed file; connect a child-file pipe)
             if (startupArgs is { Length: > 0 })
                 Opened += async (_, _) => await ProcessStartupArgs(startupArgs);
+        }
+
+        /// <summary>greys out menu items that need a loaded data file / open project (1:1 with the wpf datatriggers).</summary>
+        public void UpdateMenuStates()
+        {
+            bool hasData = Data is not null;
+            bool inProject = hasData && FilePath is not null && Project is not null;
+
+            if (MenuSave is null) // called before the view is built
+                return;
+            MenuSave.IsEnabled = MenuRun.IsEnabled = MenuRunDebug.IsEnabled = MenuRunSpecial.IsEnabled = hasData;
+            MenuFind.IsEnabled = hasData;
+            MenuProjectSave.IsEnabled = MenuProjectView.IsEnabled = MenuProjectClose.IsEnabled = inProject;
         }
 
         // handles command-line args passed to the gui: [dataFile] or [dataFile, childPipeKey] (child-file launch).
@@ -231,6 +246,7 @@ namespace UndertaleModTool
                 StatusBar.Text = $"Loaded {Path.GetFileName(path)}";
                 ChangeSelection(new DescriptionView(Path.GetFileName(path),
                     "Data file loaded. Select a resource on the left to edit it."));
+                UpdateMenuStates();
                 return true;
             }
             catch (Exception ex)

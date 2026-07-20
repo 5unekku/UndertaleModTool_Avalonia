@@ -49,11 +49,11 @@
             <MenuItem Header="_File">
                 <MenuItem Header="_New" Click="New_Click" InputGesture="Ctrl+N" />
                 <MenuItem Header="_Open" Click="Open_Click" InputGesture="Ctrl+O" />
-                <MenuItem Header="_Save" Click="Save_Click" InputGesture="Ctrl+S" />
+                <MenuItem x:Name="MenuSave" Header="_Save" Click="Save_Click" InputGesture="Ctrl+S" />
                 <Separator />
-                <MenuItem Header="_Temp run game" Click="Run_Click" InputGesture="F5" />
-                <MenuItem Header="Run game under GMS _debugger" Click="RunDebug_Click" InputGesture="Shift+F5" />
-                <MenuItem Header="Run game with other runner" Click="RunSpecial_Click" InputGesture="Alt+F5" />
+                <MenuItem x:Name="MenuRun" Header="_Temp run game" Click="Run_Click" InputGesture="F5" />
+                <MenuItem x:Name="MenuRunDebug" Header="Run game under GMS _debugger" Click="RunDebug_Click" InputGesture="Shift+F5" />
+                <MenuItem x:Name="MenuRunSpecial" Header="Run game with other runner" Click="RunSpecial_Click" InputGesture="Alt+F5" />
                 <Separator />
                 <MenuItem Header="Generate o_ffset map" Click="OffsetMap_Click" />
                 <Separator />
@@ -63,16 +63,16 @@
             <MenuItem Header="_Scripts" SubmenuOpened="ScriptsMenu_SubmenuOpened">
                 <MenuItem Header="(...loading...)" IsEnabled="False" />
             </MenuItem>
-            <MenuItem Header="_Find">
+            <MenuItem x:Name="MenuFind" Header="_Find">
                 <MenuItem Header="_Search in code" Click="SearchInCode_Click" InputGesture="Ctrl+Shift+F" />
                 <MenuItem Header="Find unreferenced _assets" Click="FindUnreferencedAssets_Click" />
             </MenuItem>
             <MenuItem Header="_Project">
                 <MenuItem Header="_New project" Click="NewProject_Click" />
                 <MenuItem Header="_Open project" Click="OpenProject_Click" />
-                <MenuItem Header="_Save project" Click="SaveProject_Click" />
-                <MenuItem Header="_View unexported assets" Click="ViewProjectAssets_Click" />
-                <MenuItem Header="_Close project" Click="CloseProject_Click" />
+                <MenuItem x:Name="MenuProjectSave" Header="_Save project" Click="SaveProject_Click" />
+                <MenuItem x:Name="MenuProjectView" Header="_View unexported assets" Click="ViewProjectAssets_Click" />
+                <MenuItem x:Name="MenuProjectClose" Header="_Close project" Click="CloseProject_Click" />
             </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Header="_GitHub" Click="GitHub_Click" />

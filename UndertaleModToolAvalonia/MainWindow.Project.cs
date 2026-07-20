@@ -35,6 +35,7 @@ namespace UndertaleModTool
             Project = project;
             project.UnexportedAssetsChanged += (_, _) => UpdateObjectLabel(Selected);
             UpdateObjectLabel(Selected);
+            UpdateMenuStates();
         }
 
         /// <summary>picks a destination data file to save the project into, warning on same-directory / empty-directory.</summary>
@@ -256,6 +257,7 @@ namespace UndertaleModTool
 
             UnloadProject();
             UpdateObjectLabel(Selected);
+            UpdateMenuStates();
             SetUMTConsoleText("Project closed.");
         }
 
